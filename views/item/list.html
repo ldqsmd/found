@@ -1,0 +1,173 @@
+
+<div class="wrapper wrapper-content animated fadeInRight" >
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <a class="btn btn-primary" href="{{ urlfor "ItemController.Add"}}?type={{.itemType}}">{{.addTile}}</a>
+                </div>
+                <div class="ibox-content" >
+                    <table class="table table-striped table-bordered table-hover dataTables-example ">
+                        <thead>
+                        <tr>
+                            <th>物品名称</th>
+                            <th>状态</th>
+                            <th>{{.happenTime}}</th>
+                            <th>{{.happenPlace}}</th>
+                            <th>{{.person}}</th>
+                            <th>物品特点</th>
+                            <th>更新时间</th>
+                            <th>发起时间</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {{range $key, $val := .list}}
+                            <tr class="gradeX">
+                                <td><a href="/item/edit?id={{$val.Id}}">{{$val.Name}}</a></td>
+                                <td>
+
+                                {{if eq $val.Type 0 }}
+                                    {{if eq $val.Status 0 }}
+                                    <span class="badge badge-danger">&nbsp;&nbsp;&nbsp;&nbsp;未找回&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                    {{else }}
+                                        <span class="badge badge-primary">&nbsp;&nbsp;&nbsp;&nbsp;已找回&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                    {{end}}
+                                {{else }}
+                                    {{if eq $val.Status 0 }}
+                                        <span class="badge badge-danger">&nbsp;&nbsp;&nbsp;&nbsp;未认领&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                    {{else }}
+                                        <span class="badge badge-primary ">&nbsp;&nbsp;&nbsp;&nbsp;已认领&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                    {{end}}
+                                {{end}}
+                                </td>
+                                <td>{{$val.Time}}</td>
+                                <td>{{$val.Place}}</td>
+                                <td>{{$val.UserId}}</td>
+                                <td>{{$val.Trait}}</td>
+                                <td>{{$val.UpdateTime}}</td>
+                                <td>{{$val.CreateTime}}</td>
+                                <td>
+                                    <a   href="/item/edit?id={{$val.Id}}" class=" btn   btn-xs btn-success" type="button">编辑</a>
+                                    <button  onclick="found({{$val.Id}},{{$val.Status}})" class=" btn   btn-xs btn-primary" type="button">修改状态</button>
+                                    <button  onclick="del({{$val.Id}})" class=" btn   btn-xs btn-danger" type="button">删除</button>
+                                </td>
+                            </tr>
+                        {{end}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Page-Level Scripts -->
+<script>
+
+    function related(id) {
+        //iframe层
+        parent.layer.open({
+            type: 2,
+            title: '编辑',
+            shadeClose: true,
+            shade: 0.3,
+            area: ['40%', '45%'],
+            maxmin: true, //开启最大化最小化按钮
+            content: ["/system/edit?systemId="+id ,"no"],
+            end:function () {
+               location.reload()
+            }
+        });
+
+    }
+
+    function edit(id) {
+        //iframe层
+        parent.layer.open({
+            type: 2,
+            title: '编辑',
+            shadeClose: true,
+            shade: 0.3,
+            area: ['40%', '30%'],
+            content: ["/system/edit?systemId="+id ,"no"],
+            end:function () {
+               location.reload()
+            }
+        });
+
+    }
+
+    function found(id,status){
+
+        itemType = {{.itemType}}
+        if (itemType ==0){
+            statusArr = ["确认标记为已经找回么?","确认标记为未找回么?"]
+        }else {
+            statusArr = ["确认标记为已经认领么?","确认标记为未认领么?"]
+        }
+        status = status == 0 ?1:0;
+
+        //询问框
+        parent.layer.confirm(statusArr[status], {
+            btn: ['确当','手滑'], //按钮
+            shade: false //不显示遮罩
+        }, function(){
+            var url     = '{{urlfor "ItemController.ChangeStatus"}}';
+            $.ajax({
+                url : url,
+                type : 'POST',
+                dataType : 'json',
+                data : {
+                    id :id,
+                    status :status,
+                },
+                success : function(data) {
+                    if(data.code == 0){
+                        parent.layer.msg(data.message, {icon: 1,time:1000,offset: '400px'},function () {
+                            window.location.reload()
+                        });
+                    }else{
+                        layer.msg(data.message, {icon: 5,time:1000,offset: '400px'});
+                    }
+                }
+            });
+        }, function(){
+            parent.layer.close()
+            parent.layer.msg('别闹！！', {time:500,shift: 6});
+        });
+    }
+
+    function del(id){
+        //询问框
+        parent.layer.confirm('删除之后将不能找回,确认删除？', {
+            btn: ['确当','手滑'], //按钮
+            shade: false //不显示遮罩
+        }, function(){
+            $.ajax({
+                url : "/item/del",
+                type : 'POST',
+                dataType : 'json',
+                data : {
+                    id :id,
+                },
+                success : function(data) {
+                    if(data.code == 0){
+                        parent.layer.msg(data.message, {icon: 1,time:1000,offset: '400px'},function () {
+                            window.location.reload()
+                        });
+                    }else{
+                        layer.msg(data.message, {icon: 5,time:1000,offset: '400px'});
+                    }
+                }
+            });
+        }, function(){
+            // parent.layer.close()
+            parent.layer.msg('别闹！！', {time:500,shift: 6});
+        });
+    }
+
+
+
+
+
+</script>

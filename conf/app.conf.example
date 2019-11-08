@@ -1,0 +1,24 @@
+appname     = baisheng
+httpport    = 8080
+runmode     = dev
+
+sessionon   = true
+sessiongcmaxlifetime   = 3600
+
+
+[mysql]
+host        = "127.0.0.1"
+databse     = "bai_sheng"
+port        = "3306"
+username    = "root"
+password    = "root"
+
+[email]
+host        = "smtp.qq.com"
+port        = "587"
+from        = "MR.Zhang"
+user        = ""
+pass        = ""
+rate        = "1"
+turn        = "on"
+

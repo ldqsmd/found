@@ -1,0 +1,72 @@
+<link href="/static/css/plugins/cropper/cropper.min.css" rel="stylesheet">
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12 col-md-12 ">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <form class="form-horizontal m-t" id="signupForm" method="post" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">收件人</label>
+                            <div class="col-sm-3">
+                                <input  id="email" value="{{.data.Email}}" name="email" class="form-control" type="text">
+                            </div>
+                            <label class="col-sm-2 control-label">主题</label>
+                            <div class="col-sm-3">
+                                <input   id="subject" value="{{.data.Subject}}" name="subject" class="form-control" type="text">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">详情</label>
+                            <div class="col-sm-3">
+                                <input   id="body" name="body" value="{{.data.Body}}" class="form-control" type="text">
+                            </div>
+                            <label class="col-sm-2 control-label">提醒时间</label>
+                            <div class="col-sm-3">
+
+                                <input   id="noticeTime" value="{{.data.NoticeTime}}" name="noticeTime" class="form-control" type="date">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <input   id="id" value="{{.data.Id}}" name="id" class="form-control" type="hidden">
+                            <label class="col-sm-2 control-label">&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                            <button class="btn btn-primary " type="submit">提交</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    //以下为官方示例
+    $().ready(function () {
+
+        // validate signup form on keyup and submit
+        var icon = "<i class='fa fa-times-circle'></i> ";
+        $("#signupForm").validate({
+            submitHandler:function(form){
+                var form = new FormData(document.getElementById("signupForm"));
+
+                $.ajax({
+                    url:"/notice/edit",
+                    type:"post",
+                    data:form,
+                    processData:false,
+                    contentType:false,
+                    success:function(data){
+
+                        if(data.code == 0){
+                            parent.layer.msg(data.message, {icon: 1,time:1000,offset: '400px'},function () {
+                                parent.layer.closeAll()
+                            });
+                        }else{
+                            parent.layer.msg(data.message, {icon: 5,time:1000,offset: '400px'});                        }
+                    }
+                });
+            }
+        });
+
+    });
+
+
+</script>

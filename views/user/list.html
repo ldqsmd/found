@@ -1,0 +1,140 @@
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <button onclick="add()" class="btn btn-primary">添加用户</button>
+                </div>
+                <div class="ibox-content">
+                    <table class="table table-striped table-bordered table-hover dataTables-example ">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>账号</th>
+                            <th>用户名</th>
+                            <th>状态</th>
+                            <th>创建时间</th>
+                            <th>E-mail</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {{range $key, $val := .list}}
+                            <tr class="gradeX">
+                                <td>{{$val.Id}}</td>
+                                <td>{{$val.Account}}</td>
+                                <td>{{$val.Name}}</td>
+                                <td>
+                                    {{if eq $val.Forbidden 0}}
+                                        <span class="badge badge-primary">&nbsp;&nbsp;&nbsp;&nbsp;启用&nbsp;&nbsp;&nbsp;</span>
+                                    {{else}}
+                                        <span class="badge badge-danger">&nbsp;&nbsp;&nbsp;&nbsp;禁用&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                    {{end}}
+                                </td>
+                                <td>{{$val.CreateTime}}</td>
+                                <td>{{$val.Email}}</td>
+                                <td>
+                                    <button onclick="edit({{$val.Id}})"   class="btn btn-success btn-xs m-l-sm"type="button">编辑</button>
+                                    <button onclick="forbid({{$val.Id}},{{$val.Forbidden}})"      class="btn btn-danger btn-xs m-l-sm"type="button">禁用</button>
+                                </td>
+                            </tr>
+                        {{end}}
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Page-Level Scripts -->
+<script>
+
+    function forbid(id,forbid){
+        //询问框
+        statusArr = ['用户被禁用后将不能登录,确认禁用么?',"确认解除该用户的禁用么?"]
+        forbidden = forbid == 0 ?1:0;
+
+        parent.layer.confirm(statusArr[forbid], {
+            btn: ['确当','手滑'], //按钮
+            shade: false //不显示遮罩
+        }, function(){
+            $.ajax({
+                url : "/user/forbid",
+                type : 'POST',
+                dataType : 'json',
+                data : {
+                    userId :id,
+                    forbidden :forbidden,
+
+                },
+                success : function(data) {
+                    if(data.code == 0){
+                        parent.layer.msg(data.message, {icon: 1,time:1000,offset: '400px'},function () {
+                            window.location.reload()
+                        });
+                    }else{
+                        layer.msg(data.message, {icon: 5,time:1000,offset: '400px'});
+                    }
+                }
+            });
+        }, function(){
+            parent.layer.msg('别闹！！', {time:500,shift: 6});
+        });
+    }
+
+    function edit(id) {
+        //iframe层
+        parent.layer.open({
+            type: 2,
+            title: '编辑信息',
+            shadeClose: true,
+            shade: 0.3,
+            area: ['60%', '55%'],
+            content: ['/user/edit?userId='+id,"yes"],
+            end:function () {
+                location.reload()
+            }
+        });
+
+    }
+    function add() {
+        //iframe层
+        parent.layer.open({
+            type: 2,
+            title: '添加用户',
+            shadeClose: true,
+            shade: 0.3,
+            area: ['60%', '50%'],
+            content: ["/user/add","yes"],
+            end:function () {
+                location.reload()
+            }
+        });
+
+    }
+
+
+    $(document).ready(function () {
+        $('.dataTables-example').dataTable(
+            {
+                "ordering": false,
+                "bAutoWidth":false,
+                "columns": [
+                    //给第一列指定宽度为表格整个宽度的20%
+                    { "width": "1%" },
+                    { "width": "3%" },
+                    { "width": "3%" },
+                    { "width": "4%" },
+                    { "width": "3%" },
+                    { "width": "4%" },
+                    { "width": "4%" },
+                ]
+            }
+        );
+
+
+        //删除 软删除
+        $(".delStore").click();
+    });
+</script>

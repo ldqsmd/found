@@ -1,0 +1,133 @@
+<div class="wrapper wrapper-content animated fadeInRight" >
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <button  onclick="add()"  class="btn btn-primary"  type="button">添加邮件提醒</button>
+                </div>
+                <div class="ibox-content" >
+                    <table class="table table-striped table-bordered table-hover dataTables-example ">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>收件邮箱</th>
+                            <th>主题</th>
+                            <th>状态</th>
+                            <th>详情</th>
+                            <th>提醒时间</th>
+                            <th>更新时间</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {{range $key, $val := .list}}
+                            <tr class="gradeX">
+                                <td>{{$val.Id}}</td>
+                                <td>{{$val.Email}}</td>
+                                <td>{{$val.Subject}}</td>
+
+                                <td>
+                                    {{if eq $val.Status 0 }}
+                                        <span class="badge badge-defautl">&nbsp;&nbsp;&nbsp;&nbsp;未提醒&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                    {{else if eq $val.Status 1  }}
+                                        <span class="badge badge-primary">&nbsp;&nbsp;&nbsp;&nbsp;已提醒&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                    {{end}}
+                                </td>
+                                <td>{{$val.Body}}</td>
+                                <td>{{$val.NoticeTime}}</td>
+                                <td>{{$val.CreateTime}}</td>
+                                <td>
+                                    <button  onclick="edit({{$val.Id}})" class=" btn   btn-xs btn-success" type="button">编辑</button>
+                                    <button  onclick="del({{$val.Id}})" class=" btn   btn-xs btn-danger" type="button">删除</button>
+                                </td>
+                            </tr>
+                        {{end}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+   $(document).ready(function () {
+       $('.dataTables-example').dataTable({
+               "ordering": false,
+               "bAutoWidth":false,
+               "columns": [
+                   //给第一列指定宽度为表格整个宽度的20%
+                   { "width": "1%" },
+                   { "width": "2%" },
+                   { "width": "4%" },
+                   { "width": "10%" },
+                   { "width": "3%" },
+                   { "width": "3%" },
+                   { "width": "3%" },
+
+               ]
+           }
+       );
+   });
+
+    function add() {
+        //iframe层
+        parent.layer.open({
+            type: 2,
+            title: '添加提醒',
+            shadeClose: true,
+            shade: 0.3,
+            area: ['45%', '40%'],
+            content: ["/notice/add" ,"yes"],
+            end:function () {
+               location.reload()
+            }
+        });
+    }
+
+    function edit(id) {
+        //iframe层
+        parent.layer.open({
+            type: 2,
+            title: '编辑提醒',
+            shadeClose: true,
+            shade: 0.3,
+            area: ['45%', '40%'],
+            content: ["/notice/edit?id="+id ,"yes"],
+            end:function () {
+                location.reload()
+            }
+        });
+    }
+
+    function del(id){
+        //询问框
+        parent.layer.confirm('删除之后将不能找回,确认删除？', {
+            btn: ['确当','手滑'], //按钮
+            shade: false //不显示遮罩
+        }, function(){
+            $.ajax({
+                url : "/notice/del",
+                type : 'POST',
+                dataType : 'json',
+                data : {
+                    id :id,
+                },
+                success : function(data) {
+                    if(data.code == 0){
+                        parent.layer.msg(data.message, {icon: 1,time:1000,offset: '400px'},function () {
+                            window.location.reload()
+                        });
+                    }else{
+                        layer.msg(data.message, {icon: 5,time:1000,offset: '400px'});
+                    }
+                }
+            });
+        }, function(){
+            // parent.layer.close()
+            parent.layer.msg('彪啊，乱点啥！', {time:500,shift: 6});
+        });
+    }
+
+</script>
