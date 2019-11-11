@@ -11,6 +11,7 @@
                         <thead>
                         <tr>
                             <th>物品名称</th>
+                            <th>图片</th>
                             <th>状态</th>
                             <th>{{.happenTime}}</th>
                             <th>{{.happenPlace}}</th>
@@ -25,6 +26,9 @@
                         {{range $key, $val := .list}}
                             <tr class="gradeX">
                                 <td><a href="/item/edit?id={{$val.Id}}">{{$val.Name}}</a></td>
+                                <td><a href="/item/edit?id={{$val.Id}}">
+                                        <img src="{{$val.Image}}" style="width:50px;height: 50px">
+                                    </a></td>
                                 <td>
 
                                 {{if eq $val.Type 0 }}

@@ -1,9 +1,9 @@
 package controllers
 
 import (
-	"found/models"
 	"errors"
 	"fmt"
+	"found/models"
 	"github.com/astaxie/beego"
 	"math/rand"
 	"os"
@@ -14,16 +14,16 @@ import (
 
 type BaseController struct {
 	beego.Controller
-	controllerName string             //当前控制名称
-	actionName     string             //当前action名称
-	requestMethod  string             //当前接口请求方式
-	adminInfo  models.Admin
+	controllerName string //当前控制名称
+	actionName     string //当前action名称
+	requestMethod  string //当前接口请求方式
+	adminInfo      models.Admin
 }
 
 func (this *BaseController) Prepare() {
 	//附值
 	this.controllerName, this.actionName = this.GetControllerAndAction()
-	this.requestMethod = this.Ctx.Request.Method  //当前接口请求方式
+	this.requestMethod = this.Ctx.Request.Method //当前接口请求方式
 	//从Session里获取数据 设置用户信息
 	this.adapterAdminInfo()
 	//this.checkLogin()
@@ -33,9 +33,9 @@ func (this *BaseController) Prepare() {
 //适配到BaseController
 func (this *BaseController) adapterAdminInfo() {
 	adminInfo := this.GetSession("adminInfo")
-	if adminInfo != nil{
+	if adminInfo != nil {
 		this.adminInfo = adminInfo.(models.Admin)
-		this.Data["adminInfo"]  = adminInfo
+		this.Data["adminInfo"] = adminInfo
 	}
 }
 
@@ -62,103 +62,107 @@ func (this *BaseController) checkLogin() {
 }
 
 // 设置模板
-// 第一个参数模板，第二个参数为layout
+// 第一个参数为layout，
+// 第二个参数为模板
 func (this *BaseController) SetTpl(template ...string) {
 
 	var tplName string
 	layout := "base/layout_base.html"
 	switch {
-		case len(template) == 1:
-			tplName = template[0]
-		case len(template) == 2:
-			 layout  = template[0]
-			 tplName = template[1]
-		default:
-			//不要Controller这个10个字母
-			ctrlName := strings.ToLower(this.controllerName[0 : len(this.controllerName)-10])
-			actionName := strings.ToLower(this.actionName)
-			tplName = ctrlName + "/" + actionName + ".html"
+	case len(template) == 1:
+		tplName = template[0]
+	case len(template) == 2:
+		layout = template[0]
+		tplName = template[1]
+		//三个参数的时候
+	// 第一个参数为layout，
+	// 第二个参数为模板路径
+	// 第三个参数为模板名称
+	case len(template) == 3:
+		layout = template[0]
+		tplName = template[1] + template[2]
+	default:
+		//不要Controller这个10个字母
+		ctrlName := strings.ToLower(this.controllerName[0 : len(this.controllerName)-10])
+		actionName := strings.ToLower(this.actionName)
+		tplName = ctrlName + "/" + actionName + ".html"
 	}
 
 	this.Layout = layout
 	this.TplName = tplName
+	fmt.Println(tplName)
 }
 
 //JSON返回
-func (this *BaseController) ReturnJson(code int,message string,data interface{}) {
+func (this *BaseController) ReturnJson(code int, message string, data interface{}) {
 
-	var  returnJson models.ReturnJson
-	returnJson.Code	 	= code
-	returnJson.Message 	= message
-	returnJson.Data 	= data
-	this.Data["json"] 	= &returnJson
+	var returnJson models.ReturnJson
+	returnJson.Code = code
+	returnJson.Message = message
+	returnJson.Data = data
+	this.Data["json"] = &returnJson
 	this.ServeJSON()
 	this.StopRun()
 }
 
 //1 上传excel 2 pic
-func (this *BaseController) UpFileTable(formFile string ,fileType int)(string,error){
+func (this *BaseController) UpFileTable(formFile string, fileType int) (string, error) {
 
-	var  filePath string
- 	f, h,err := this.GetFile(formFile)//获取上传的文件
+	var filePath string
+	f, h, err := this.GetFile(formFile) //获取上传的文件
 	if err != nil {
-		return filePath,err
+		return filePath, err
 	}
 	ext := path.Ext(h.Filename)
 
 	switch fileType {
-		case 1:
-			//验证后缀名是否符合要求
-			var AllowExtMap map[string]bool = map[string]bool{
-				".xls":true,
-				".csv":true,
-				".xlsx":true,
-			}
-			if _,ok:=AllowExtMap[ext];!ok{
-				return filePath,errors.New("文件格式不正确,允许文件格式(.xls/.csv/.xlsx)")
-			}
+	case 1:
+		//验证后缀名是否符合要求
+		var AllowExtMap map[string]bool = map[string]bool{
+			".xls":  true,
+			".csv":  true,
+			".xlsx": true,
+		}
+		if _, ok := AllowExtMap[ext]; !ok {
+			return filePath, errors.New("文件格式不正确,允许文件格式(.xls/.csv/.xlsx)")
+		}
 
-		case 2:
-			//验证后缀名是否符合要求
-			var AllowExtMap map[string]bool = map[string]bool{
-				".jpg":true,
-				".png":true,
-				".img":true,
-			}
-			if _,ok:=AllowExtMap[ext];!ok{
-				return filePath,errors.New("文件格式不正确,允许文件格式(.jpg/.png/.img)")
-			}
+	case 2:
+		//验证后缀名是否符合要求
+		var AllowExtMap map[string]bool = map[string]bool{
+			".jpg": true,
+			".png": true,
+			".img": true,
+		}
+		if _, ok := AllowExtMap[ext]; !ok {
+			return filePath, errors.New("文件格式不正确,允许文件格式(.jpg/.png/.img)")
+		}
 	}
 
 	//创建目录
-	uploadDir := "static/upload/"+formFile+"/"
-	err = os.MkdirAll( uploadDir , 777)
+	uploadDir := "static/upload/" + formFile + "/"
+	err = os.MkdirAll(uploadDir, 777)
 	if err != nil {
-		return filePath,err
+		return filePath, err
 	}
 	//构造文件名称
-	fileName := time.Now().Format("20060102150405_") + fmt.Sprintf("%d", rand.Intn(9999)+1000 ) + ext
-	defer f.Close()//关闭上传的文件，不然的话会出现临时文件不能清除的情况
+	fileName := time.Now().Format("20060102150405_") + fmt.Sprintf("%d", rand.Intn(9999)+1000) + ext
+	defer f.Close() //关闭上传的文件，不然的话会出现临时文件不能清除的情况
 
-	err = this.SaveToFile(formFile, uploadDir + fileName)
+	err = this.SaveToFile(formFile, uploadDir+fileName)
 	if err != nil {
-		return filePath,err
+		return filePath, err
 	}
-	filePath = "/"+uploadDir + fileName
-	return filePath,nil
+	filePath = "/" + uploadDir + fileName
+	return filePath, nil
 }
-
-
-
 
 //
 func (this *BaseController) Error404() {
-
-	page404Url := this.URLFor("HomeController.Page404")+"?returnUrl="+this.Ctx.Request.URL.Path
+	page404Url := this.URLFor("HomeController.Page404") + "?returnUrl=" + this.Ctx.Request.URL.Path
 	this.Redirect(page404Url, 302)
 	this.StopRun()
 }
-
 
 func (c *BaseController) Error501() {
 	c.Data["content"] = "server error"

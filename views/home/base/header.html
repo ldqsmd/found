@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh" class="">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="renderer" content="webkit">
+    <meta name="applicable-device" content="pc,mobile">
+    <title>Lost&Found</title>
+    <link rel="stylesheet" id="ui_style-css" href="/static/home/ui.style.min.css" type="text/css" media="all">
+</head>
+<body class="archive post-type-archive post-type-archive-blog">
+<div class="cd-cover-layer"></div> <!-- cover main content when search form is open -->
+<header>
+    <!--加载头部进度条-->
+    <div id="w-loading"> <div style="width: 100%; display: none;"></div></div>
+    <!--顶部信息 开始  -->
+    <nav class="navbar navbar-default nav-home ">
+        <!--顶部信息 结束 -->
+        <div class="header-main">
+            <!--container Begin-->
+            <div class="container header-wrap">
+                <div class="navbar-header">
+                    <button aria-expanded="false" type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span> <span class="icon-bar"></span>
+                    </button>
+                    <a href="/" title="lost&found">
+                        <img alt="lost&found" src="/static/home/logo2.png" class="lazy" style="width: 45%">
+                    </a>
+                    <div class="visible-xs  user-icon">
+                        <a class="qb" href="/blog#login" data-form="loginform" id="ui-login"></a>
+                    </div>
+                </div>
+                <div id="navbar" class="collapse navbar-collapse">
+                    <div id="main-nav">
+                        <ul class="nav navbar-nav">
+                            <li class="current-menu-item">
+                                <a href="/home/item/list?type=0">寻物</a>
+                            </li>
+                            <li >
+                                <a href="/home/item/list?type=1">认领</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="nav-left-login navbar-nav hidden-xs">
+                        <a class="btn btn-default qb login_btn " href="/blog#login"
+                           data-form="loginform" id="ui-login">登录</a>
+                        <a class="btn btn-primary qb reg " href="/blog#login">注册</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<style>
+
+
+    .label {
+        background-color: #d1dade;
+        color: #5e5e5e;
+        font-size: 10px;
+        font-weight: 600;
+        padding: 3px 8px;
+        text-shadow: none;
+    }
+
+    .badge {
+        background-color: #d1dade;
+        color: #5e5e5e;
+        font-size: 11px;
+        font-weight: 600;
+        padding-bottom: 4px;
+        padding-left: 6px;
+        padding-right: 6px;
+        text-shadow: none;
+    }
+
+    .label-primary,
+    .badge-primary {
+        background-color: #1ab394;
+        color: #FFFFFF;
+    }
+
+    .label-success,
+    .badge-success {
+        background-color: #1c84c6;
+        color: #FFFFFF;
+    }
+
+    .label-warning,
+    .badge-warning {
+        background-color: #f8ac59;
+        color: #FFFFFF;
+    }
+
+    .label-warning-light,
+    .badge-warning-light {
+        background-color: #f8ac59;
+        color: #ffffff;
+    }
+
+    .label-danger,
+    .badge-danger {
+        background-color: #ed5565;
+        color: #FFFFFF;
+    }
+
+    .label-info,
+    .badge-info {
+        background-color: #23c6c8;
+        color: #FFFFFF;
+    }
+
+    .label-inverse,
+    .badge-inverse {
+        background-color: #262626;
+        color: #FFFFFF;
+    }
+
+    .label-white,
+    .badge-white {
+        background-color: #FFFFFF;
+        color: #5E5E5E;
+    }
+
+    .label-white,
+    .badge-disable {
+        background-color: #2A2E36;
+        color: #8B91A0;
+    }
+
+</style>

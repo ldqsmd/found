@@ -1,0 +1,126 @@
+<section class="main-body">
+    <div class="container">
+        <div itemscope="" itemtype="http://schema.org/WebPage" id="crumbs" class="breadcrumb">
+            <a itemprop="breadcrumb"
+               href="/">Lost&Found</a>
+            <em class="uicon-angle-right"></em> <span class="current">
+                {{if eq .itemType 0}}
+                    寻物
+                {{else}}
+                    招领
+                {{end}}
+            </span>
+        </div>
+        <div id="primary" class=" primary essays-list">
+            <div class="col-md-8 article">
+                <ul>
+                    {{range $key, $val := .list}}
+                        <li id="post-15011" class="group">
+                            <div class="col-xs-12 col-md-4">
+                                <a target="_blank" href="/home/item/detail?id={{$val.Id}}" title="{{$val.Name}}">
+                                    <div class="thumb">
+                                        <img alt="" class="lazy" src="{{$val.Image}}" style="display: inline;">
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="item-main col-xs-12 col-md-8 ">
+                                <div class="title">
+                                    <h2>
+                                        <a href="/home/item/detail?id={{$val.Id}}" rel="bookmark" title="{{$val.Title}}">{{$val.Title}} </a>
+                                    </h2>
+                                </div>
+                                <div class="meta">
+                                    <div class="excerpt">
+                                        遗失物品:{{$val.Name}}<br>
+                                        遗失时间:{{$val.Time}}<br>
+                                        遗失地点:{{$val.Place}}<br>
+                                        物品特征:{{$val.Trait}}<br>
+                                    </div>
+                                    <div class="data pull-right">
+                                        <time class="time">
+                                          {{$val.CreateTime}}
+                                        </time>
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    {{end}}
+                </ul>
+                <nav class="page-nav page-nav-default">
+                    <div class="pages">
+                        <ul id="pagination" class="pagination pagination-sm"><em></em>
+                            <li class="active"><a href="javascript:;"> 1</a></li>
+                            <li><a href="/blog?bp=2">2</a></li>
+                            <li><a href="/blog?bp=3">3</a></li>
+                            <li><a href="/blog?bp=4">4</a></li>
+                            <li><a href="/blog?bp=5">5</a></li>
+                            <li><a href="/blog?bp=2" class="next mtips" title="下一页"> »</a></li>
+                            <li><a href="/blog?bp=46" class="last">46</a></li>
+                            <input type="text" name="custompage" class="hidden pagenumber mtips" placeholder="页码"
+                                   title="输入页码后按Enter键查询" size="12"
+                                   onkeydown="if(event.keyCode==13) {window.location=&#39;/blog?bp=&#39;+this.value; return false;}">
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+            <div class="col-md-4">
+                <div id="sidebar" class="widget-area blog">
+
+                    <aside id="random-posts-4" class="widget widget_my_random_posts"><h3 class="widget-title">
+                            <i class="uicon-tag"></i>消息通知</h3><ul id="randomposts">
+                            <li>
+                                <a href="/blog/canadian-students-ability.html">成功申请加拿大留学需要具备哪些能力？</a>
+                            </li>
+                            <li><a href="/blog/interview.html">如何高质量“秒杀”美高面试招生官</a></li>
+                        </ul>
+                    </aside>
+                    <aside id="top-posts-3" class="widget widget_top_posts">
+                        <h3 class="widget-title">
+                            <i class="uicon-tag"></i>喜讯</h3>
+                        <ul>
+                            {{range $key, $val := .list}}
+                                {{if eq  $val.Status 1}}
+                                <li>
+                                <li>
+                                     <!-- 右边栏start -->
+                                    <div class="media">
+                                        <div class="thumb">
+                                            <a  href="/home/item/detail?id={{$val.Id}}" title="{{$val.Title}}">
+                                                <img class="media-object" src="{{$val.Image}}" alt="{{$val.Title}}">
+                                            </a>
+
+                                        </div>
+
+                                        <div class="media-body">
+                                            <a  href="/home/item/detail?id={{$val.Id}}" title="{{$val.Title}}！">
+                                                <h4 class="top-heading">{{$val.Title}}</h4>
+                                            </a>
+                                            <div class="meta">
+                                                <div class="pull-left">
+                                                    <time class="entry-date" datetime="{{$val.UpdateTime}}">{{$val.UpdateTime}}</time>
+                                                </div>
+                                                <span class="gap-point">&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;</span>
+                                                {{if eq $val.Type 0 }}
+                                                    <span class="badge badge-primary">已找回</span>
+                                                {{else }}
+                                                    <span class="badge badge-primary ">已认领</span>
+                                                {{end}}
+                                            </div>
+                                        </div>
+
+                                </div>
+                                </li>
+                                </li>
+                                {{end}}
+                            {{end}}
+                            <!-- 右边栏end -->
+                        </ul>
+                    </aside>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>

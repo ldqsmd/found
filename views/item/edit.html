@@ -34,10 +34,31 @@
                                 <input   id="place" name="place" value="{{.data.Place}} " class="form-control" type="text">
                             </div>
                         </div>
+
                         <div class="form-group">
                             <label class="col-sm-2 control-label">物品特点</label>
                             <div class="col-sm-3">
                                 <input   id="trait" name="trait" value="{{.data.Trait}}"  class="form-control" type="text">
+                            </div>
+                            <label class="col-sm-2 control-label">备注信息</label>
+                            <div class="col-sm-3">
+                                <input type="text" name="remark"  value="{{.data.Remark}}" class="form-control" >
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">物品图片</label>
+                            <div class="col-sm-3">
+                                <input type="file" name="itemPic" class="upload-file" accept="image/*">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">物品图片</label>
+                            <div class="col-sm-2">
+                                <img  style="width: 100%;height: 100%" src="{{.data.Image}}" alt="{{.data.Name}}">
+                            </div>
+                            <label class="col-sm-3 control-label">物品图片预览</label>
+                            <div class="col-sm-2">
+                                <img id="show-file"    style=" width: 100%;height: 100%" src="" alt="">
                             </div>
                         </div>
 
@@ -45,6 +66,7 @@
                             <label class="col-sm-2 control-label"></label>
                             <input class="btn btn-primary " type="hidden" name="type" value="{{.data.Type}}">
                             <input class="btn btn-primary " type="hidden" name="id" value="{{.data.Id}}">
+                            <input class="btn btn-primary " type="hidden" name="image" value="{{.data.Image}}">
                             <button class="btn btn-primary " type="submit">提交</button>
                         </div>
                     </form>
@@ -92,6 +114,33 @@
                 });
             }
         });
+
+        //图片预览
+        function imgPreview(fileDom,e,ele){
+            //获取文件
+            var file = fileDom.files[0];
+            var supportedTypes = ['image/jpg', 'image/jpeg', 'image/png'];
+            if(!(supportedTypes.indexOf(file.type)>-1)){
+                alert('请选择.jpg、.png格式图片')
+                return;
+            }
+            var uploadFiles = e.target.files || e.dataTransfer.files;
+            console.log(file.type);
+            var size=uploadFiles.length;
+            for(var i=0;i<size;i++){
+                /*读取文件*/
+                var reader=new FileReader();
+                reader.readAsDataURL(uploadFiles[i]);
+                reader.onload=function (e) {
+                    var imgBase=e.target.result;
+                    $('#show-file').attr('src',imgBase).show()
+                }
+            }
+        }
+
+        $('.upload-file').change(function (e) {
+            imgPreview(this,e,$(this));
+        })
 
     });
 
