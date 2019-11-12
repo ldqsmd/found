@@ -1,4 +1,18 @@
+<body class="archive post-type-archive post-type-archive-blog">
 <section class="main-body">
+    <div class="container-fluid essays-header parallax">
+        <div class="header-shadow-overlay"></div>
+        <div class="container text-center">
+            <h2>Lost&Found</h2>
+            <p class="intro">打造国内最大的失物招领平台</p>
+            <div class="section text-center">
+                <a href="/home/item/add?type=0" target="_self" class="btn {{if eq .itemType 1}} btn-white {{end}} ">发布寻物</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+                <a href="/home/item/add?type=1" class="btn {{if eq .itemType 0}} btn-white {{end}} ">发布招领</a>
+            </div>
+        </div>
+    </div>
+
     <div class="container">
         <div itemscope="" itemtype="http://schema.org/WebPage" id="crumbs" class="breadcrumb">
             <a itemprop="breadcrumb"
@@ -31,10 +45,8 @@
                                 </div>
                                 <div class="meta">
                                     <div class="excerpt">
-                                        遗失物品:{{$val.Name}}<br>
-                                        遗失时间:{{$val.Time}}<br>
-                                        遗失地点:{{$val.Place}}<br>
-                                        物品特征:{{$val.Trait}}<br>
+                                       <strong> {{$val.Trait}}</strong><br>
+                                        {{$val.Remark}}
                                     </div>
                                     <div class="data pull-right">
                                         <time class="time">
@@ -83,35 +95,35 @@
                             {{range $key, $val := .list}}
                                 {{if eq  $val.Status 1}}
                                 <li>
-                                <li>
-                                     <!-- 右边栏start -->
-                                    <div class="media">
-                                        <div class="thumb">
-                                            <a  href="/home/item/detail?id={{$val.Id}}" title="{{$val.Title}}">
-                                                <img class="media-object" src="{{$val.Image}}" alt="{{$val.Title}}">
-                                            </a>
+                                    <li style="border-bottom:1px solid #ecedee;">
+                                         <!-- 喜讯 start -->
+                                        <div class="media">
+                                            <div class="thumb">
+                                                <a  href="/home/item/detail?id={{$val.Id}}" title="{{$val.Title}}">
+                                                    <img class="media-object" src="{{$val.Image}}" alt="{{$val.Title}}">
+                                                </a>
 
-                                        </div>
-
-                                        <div class="media-body">
-                                            <a  href="/home/item/detail?id={{$val.Id}}" title="{{$val.Title}}！">
-                                                <h4 class="top-heading">{{$val.Title}}</h4>
-                                            </a>
-                                            <div class="meta">
-                                                <div class="pull-left">
-                                                    <time class="entry-date" datetime="{{$val.UpdateTime}}">{{$val.UpdateTime}}</time>
-                                                </div>
-                                                <span class="gap-point">&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;</span>
-                                                {{if eq $val.Type 0 }}
-                                                    <span class="badge badge-primary">已找回</span>
-                                                {{else }}
-                                                    <span class="badge badge-primary ">已认领</span>
-                                                {{end}}
                                             </div>
-                                        </div>
 
-                                </div>
-                                </li>
+                                            <div class="media-body">
+                                                <a  href="/home/item/detail?id={{$val.Id}}" title="{{$val.Title}}！">
+                                                    <h4 class="top-heading">{{$val.Title}}</h4>
+                                                </a>
+                                                <div class="meta">
+                                                    <div class="pull-left">
+                                                        <time class="entry-date" datetime="{{$val.UpdateTime}}">{{$val.UpdateTime}}</time>
+                                                    </div>
+                                                    <span class="gap-point">&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;</span>
+                                                    {{if eq $val.Type 0 }}
+                                                        <span class="badge badge-primary">已找回</span>
+                                                    {{else }}
+                                                        <span class="badge badge-primary ">已认领</span>
+                                                    {{end}}
+                                                </div>
+                                            </div>
+
+                                    </div>
+                                    </li>
                                 </li>
                                 {{end}}
                             {{end}}
@@ -124,3 +136,4 @@
         </div>
     </div>
 </section>
+</body>

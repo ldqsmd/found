@@ -6,12 +6,22 @@ import (
 )
 
 func init() {
-
+	//home
 	beego.Router("/", &controllers.HomeController{}, "GET:Index")
 	beego.Router("/page404", &controllers.HomeController{}, "GET:Page404")
 
 	beego.Router("/home/item/list", &controllers.ItemController{}, "Get:HomeList")
+	//login
+	beego.Router("/home/login", &controllers.LoginController{}, "*:HomeLogin")
+	beego.Router("/home/register", &controllers.LoginController{}, "*:HomeRegister")
+	beego.Router("/home/logout", &controllers.LoginController{}, "*:HomeLogout")
 
+	//user
+	beego.Router("/home/user/info", &controllers.UserController{}, "*:UserInfo")
+
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+	beego.Router("/admin/index", &controllers.ItemController{}, "GET:Index")
 	//login
 	beego.Router("/login", &controllers.LoginController{}, "*:Login")
 	beego.Router("/logout", &controllers.LoginController{}, "*:Logout")

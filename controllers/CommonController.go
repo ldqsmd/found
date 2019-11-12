@@ -22,7 +22,7 @@ const (
 
 	BaseLayoutPage = "base/layout_page.html"
 	HomeBaseLayout = "home/base/layout.html"
-	HomeTplPath    = "home/item/"
+	HomeTplPath    = "home"
 )
 
 // 通过map主键唯一的特性过滤重复元素

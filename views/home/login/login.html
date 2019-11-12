@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<!-- saved from url=(0036)http://www.uiessays.com/wp-login.php -->
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN"><!--<![endif]-->
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>lost&found ‹ 登录</title>
+    <link rel="stylesheet" href="/static/home/login.css" type="text/css" media="all">
+    <style type="text/css">
+        h1 a {
+            background-image: url(/static/home/logo2.png) !important;
+        }
+    </style>
+    <meta name="robots" content="noindex,noarchive">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta name="viewport" content="width=device-width">
+    <script type="text/javascript" src="/static/js/jquery.min.js"></script>
+</head>
+<body class="login login-action-login wp-core-ui  locale-en-us">
+<div id="login">
+    <h1><a href="/" title="lost&found" tabindex="-1">lost&found</a></h1>
+    <form name="loginform" id="loginform" method="post">
+        <p>
+            <label for="user_login">用户名<br>
+            <input type="text" name="account" id="user_login" class="input" value="" size="20"></label>
+        </p>
+        <p>
+            <label for="user_pass">密码<br>
+            <input type="password" name="password" id="user_pass" class="input" value="" size="20"></label>
+        </p>
+        <p class="forgetmenot"><label for="rememberme"><input name="rememberme" type="checkbox" id="rememberme" value="forever"> 记住我的登录信息</label></p>
+        <p class="submit">
+            <input type="button" id="homeLogin" class="button button-primary button-large" value="登录">
+            <input type="hidden" name="testcookie" value="1">
+        </p>
+    </form>
+    <script type="text/javascript">
+        $("#homeLogin").click(function () {
+            var username = $.trim($("#user_login").val());
+            var password = $.trim($("#user_pass").val());
+            if (username == "") {
+                alert("请输入用户名");
+                return false;
+            } else if (password == "") {
+                alert("请输入密码");
+                return false;
+            }
+            //ajax去服务器端校验
+            var data = {account: username, password: password};
+
+            $.ajax({
+                type: "POST",
+                url: "/home/login",
+                data: data,
+                dataType: 'json',
+                success: function (data) {
+                    //alert(msg);
+                    if (data.code == 0) {
+                        window.location.href = "/";
+                    } else {
+                        alert(data.message);
+                    }
+                }
+            });
+        });
+    </script>
+</div>
+</body>
+</html>

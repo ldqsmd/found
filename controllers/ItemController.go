@@ -69,6 +69,10 @@ func (this *ItemController) filterParams(params *models.Item) {
 	}
 }
 
+func (this *ItemController) Index() {
+	this.SetTpl("index.html")
+}
+
 //列表
 func (this *ItemController) List() {
 
@@ -246,7 +250,7 @@ func (this *ItemController) HomeList() {
 		t, _ := strconv.Atoi(itemType)
 		this.Data["list"], _ = item.GetList(t)
 		this.GetContentByType(ActList, itemType)
-		this.SetTpl(HomeBaseLayout, HomeTplPath, "list.html")
+		this.SetTpl(HomeBaseLayout, HomeTplPath, "/item/list.html")
 	}
 
 }

@@ -17,6 +17,7 @@ type BaseController struct {
 	controllerName string //当前控制名称
 	actionName     string //当前action名称
 	requestMethod  string //当前接口请求方式
+	userInfo       models.User
 	adminInfo      models.Admin
 }
 
@@ -26,7 +27,9 @@ func (this *BaseController) Prepare() {
 	this.requestMethod = this.Ctx.Request.Method //当前接口请求方式
 	//从Session里获取数据 设置用户信息
 	this.adapterAdminInfo()
-	//this.checkLogin()
+	this.adapterUserInfo()
+	//this.checAdminLogin()
+	//this.checkHomeLogin()
 }
 
 //获取session admin信息
@@ -36,15 +39,28 @@ func (this *BaseController) adapterAdminInfo() {
 	if adminInfo != nil {
 		this.adminInfo = adminInfo.(models.Admin)
 		this.Data["adminInfo"] = adminInfo
+	} else {
+		this.Data["adminInfo"] = new(models.Admin)
 	}
 }
 
-//检查用户是否登录
+//获取session user信息
+//适配到BaseController
+func (this *BaseController) adapterUserInfo() {
+	userInfo := this.GetSession("userInfo")
+	if userInfo != nil {
+		this.userInfo = userInfo.(models.User)
+		this.Data["userInfo"] = userInfo
+	} else {
+		this.Data["userInfo"] = new(models.User)
+	}
+}
+
+//检查后台用户是否登录
 //没有登录返回登录页面
-func (this *BaseController) checkLogin() {
+func (this *BaseController) checAdminLogin() {
 
 	if this.adminInfo.Id == 0 {
-
 		//登录页面地址
 		loginUrl := this.URLFor("LoginController.Login") + "?returnURL="
 		//登录成功后返回的址为当前
@@ -56,6 +72,21 @@ func (this *BaseController) checkLogin() {
 			this.ReturnJson(302, "请登录", loginUrl+returnURL)
 		}
 		this.Redirect(loginUrl+returnURL, 302)
+		this.StopRun()
+	}
+
+}
+
+//检查前台是否登录
+//没有登录返回登录页面
+func (this *BaseController) checkHomeLogin() {
+
+	if this.userInfo.Id == 0 {
+		//登录页面地址
+		loginUrl := this.URLFor("LoginController.HomeLogin")
+		//登录成功后返回的址为当前
+		//如果ajax请求则返回相应的错码和跳转的地址
+		this.Redirect(loginUrl, 302)
 		this.StopRun()
 	}
 

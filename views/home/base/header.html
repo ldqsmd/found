@@ -1,16 +1,4 @@
-<!DOCTYPE html>
-<html lang="zh" class="">
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, user-scalable=no">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="renderer" content="webkit">
-    <meta name="applicable-device" content="pc,mobile">
-    <title>Lost&Found</title>
-    <link rel="stylesheet" id="ui_style-css" href="/static/home/ui.style.min.css" type="text/css" media="all">
-</head>
-<body class="archive post-type-archive post-type-archive-blog">
-<div class="cd-cover-layer"></div> <!-- cover main content when search form is open -->
+
 <header>
     <!--加载头部进度条-->
     <div id="w-loading"> <div style="width: 100%; display: none;"></div></div>
@@ -36,28 +24,41 @@
                 <div id="navbar" class="collapse navbar-collapse">
                     <div id="main-nav">
                         <ul class="nav navbar-nav">
-                            <li class="current-menu-item">
-                                <a href="/home/item/list?type=0">寻物</a>
-                            </li>
-                            <li >
-                                <a href="/home/item/list?type=1">认领</a>
-                            </li>
+                            <li ><a href="/home/item/list?type=0">首页</a></li>
+                            <li class="current-menu-item"><a href="/home/item/list?type=0">寻物</a></li>
+                            <li><a href="/home/item/list?type=1">招领</a></li>
+                            <li><a href="/home/item/list?type=1">发布寻物</a></li>
+                            <li><a href="/home/item/add?type=1">发布招领</a></li>
+                            <li><a href="/home/user/info">个人中心</a></li>
                         </ul>
                     </div>
+                    {{if eq .userInfo.Name  "" }}
                     <div class="nav-left-login navbar-nav hidden-xs">
-                        <a class="btn btn-default qb login_btn " href="/blog#login"
-                           data-form="loginform" id="ui-login">登录</a>
-                        <a class="btn btn-primary qb reg " href="/blog#login">注册</a>
+                        <a class="btn btn-default qb login_btn " href="/home/login" data-form="loginform" id="aaaaaa">登录</a>
+                        <a class="btn btn-primary qb reg " href="/home/register">注册</a>
                     </div>
+                     {{else}}
+                    <div class="nav-left-login navbar-nav hidden-xs">
+                        <a class="ui-account" href="http://www.uiessays.com/home/order" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="memberMenu">
+                           {{.userInfo.Email}}&nbsp;&nbsp;&nbsp;
+                            <img width="45" height="45" src="/static/images/default_avatar-none.png" alt="{{.userInfo.Name}} ">
+                        </a>
+                        <ul class="dropdown-menu dropdown-user" aria-labelledby="memberMenu" role="menu">
+                            <li><a href="/home/item/add?type=0" title="发布寻物启事"><i class="uicon-pencil-square"></i>发布寻物启事</a></li>
+                            <li><a href="/home/item/add?type=1" title="发布招领启事"><i class="uicon-pencil-square"></i>发布招领启事</a></li>
+                            <li><a href="/home/item/list?type=0&userId={{.userInfo.Id}}" title="我的寻物启事"><i class="uicon-inbox"></i>我的寻物启事</a>
+                            <li><a href="/home/item/list?type=1&userId={{.userInfo.Id}}" title="我的认领启事"><i class="uicon-inbox"></i>我的认领启事</a></li>
+                            <li><a href="/home/user/info" title="我的设置"><i class="uicon-wrench"></i>我的设置</a></li>
+                            <li><a href="#" title="退出登录"><i class="uicon-sign-out"></i>退出登录</a></li>
+                        </ul>
+                    </div>
+                    {{end}}
                 </div>
             </div>
         </div>
     </nav>
 </header>
-
 <style>
-
-
     .label {
         background-color: #d1dade;
         color: #5e5e5e;
