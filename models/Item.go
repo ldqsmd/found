@@ -32,6 +32,14 @@ func (this *Item) GetList(itemType int) ([]Item, error) {
 }
 
 //獲取詳情
+func (this *Item) GetNewItem(num int) ([]Item, error) {
+	var list []Item
+	query := orm.NewOrm().QueryTable("item")
+	_, err := query.OrderBy("-create_time").Limit(num).All(&list)
+	return list, err
+}
+
+//獲取詳情
 func (this *Item) GetDetail(id string) (Item, error) {
 	var item Item
 	err := orm.NewOrm().Raw("select * from item where id=?", id).QueryRow(&item)

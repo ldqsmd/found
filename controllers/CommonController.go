@@ -15,6 +15,7 @@ const (
 	FilterErrCode       = -2
 	InsertUpdateErrCode = -3
 	DelErrCode          = -4
+	GetDetailErrCode    = -5
 
 	//上传文件类型
 	UploadExcel   = 1

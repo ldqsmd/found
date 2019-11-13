@@ -86,7 +86,14 @@ func (this *BaseController) checkHomeLogin() {
 		loginUrl := this.URLFor("LoginController.HomeLogin")
 		//登录成功后返回的址为当前
 		//如果ajax请求则返回相应的错码和跳转的地址
-		this.Redirect(loginUrl, 302)
+		//如果ajax请求则返回相应的错码和跳转的地址
+		if this.Ctx.Input.IsAjax() {
+			//由于是ajax请求，因此地址是header里的Referer
+			returnURL := this.Ctx.Input.Refer()
+			this.ReturnJson(302, "请登录", loginUrl+returnURL)
+		} else {
+			this.Redirect(loginUrl, 302)
+		}
 		this.StopRun()
 	}
 
@@ -186,21 +193,4 @@ func (this *BaseController) UpFileTable(formFile string, fileType int) (string, 
 	}
 	filePath = "/" + uploadDir + fileName
 	return filePath, nil
-}
-
-//
-func (this *BaseController) Error404() {
-	page404Url := this.URLFor("HomeController.Page404") + "?returnUrl=" + this.Ctx.Request.URL.Path
-	this.Redirect(page404Url, 302)
-	this.StopRun()
-}
-
-func (c *BaseController) Error501() {
-	c.Data["content"] = "server error"
-	c.TplName = "error/501.tpl"
-}
-
-func (c *BaseController) ErrorDb() {
-	c.Data["content"] = "database is now down"
-	c.TplName = "error/dberror.tpl"
 }

@@ -2,6 +2,7 @@ package main
 
 import (
 	"found/common"
+	"found/controllers"
 	_ "found/routers"
 	"github.com/astaxie/beego"
 )
@@ -11,7 +12,6 @@ func init() {
 }
 
 func main() {
-	//beego.ErrorHandler("404",page_not_found)
+	beego.ErrorController(&controllers.ErrorController{})
 	beego.Run()
 }
-

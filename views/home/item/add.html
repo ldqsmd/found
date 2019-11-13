@@ -1,0 +1,101 @@
+<body class="page-template page-template-order-now page-template-order-now-php page page-id-117 logged-in body-order-now">
+<div class="cd-cover-layer"></div> <!-- cover main content when search form is open -->
+<section class="main-body">
+    <div class="container-fluid order-header parallax page-ui-header">
+        <div class="header-shadow-overlay the-cover"></div>
+        <div class="container">
+            <div class="col-xs-12 col-md-2 l-sidebar">
+                <img src="/static/images/Writing.png" alt="发布信息">
+            </div>
+            <div class="col-xs-12 col-md-8 order-intro">
+                <h1>{{.actTitle}}</h1>
+                {{if eq .itemType 0}}
+                    <p>发布遗失物品信息以及联系方式,要尽可能详细方便精确定位。</p>
+                {{else}}
+                    <p>发布拾取物品信息以及联系方式,要尽可能详细方便精确定位。</p>
+                {{end}}
+                <div class="tags">
+                    <span class="i-tag">时间</span>
+                    <span class="i-tag">地点</span>
+                    <span class="i-tag">物品特征</span>
+                    <span class="i-tag">详情描述</span>
+                    <span class="i-tag">...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container order-now">
+        <div id="orderwarp" class="orderwarp col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <form method="POST" role="form" class="order-form" novalidate="novalidate">
+                <div id="form-content">
+                    <fieldset id="one" class="col-md-12">
+                        <h3>
+                            <i class="uicon-location_history"></i> 详细信息
+                        </h3>
+                        <ul id="userPanel" class="panel-collapse collapse in contactUsForm" role="tabpanel" aria-labelledby="headingOne">
+                            <li>
+                                <div class="col-md-3">
+                                    <label for="contactOrderName"> * 姓名<small class="english">Name</small></label>
+                                </div>
+                                <div class="col-md-6">
+                                    <input id="userName" name="userName" class="form-control required" type="text" value="{{.userInfo.Name}}" readonly="readonly" aria-required="true">
+                                </div>
+                            </li>
+                            <li>
+                                <div class="col-md-3">
+                                    <label for="orderMail"> * 邮箱<small class="english">Email</small></label>
+                                </div>
+                                <div class="col-md-6 yx">
+                                    <input id="email" name="email" class="form-control" type="text" value="{{.userInfo.Email}}" readonly="readonly">
+                                </div>
+                            </li>
+                            <li>
+                                <div class="col-md-3">
+                                    <label for="contactOrderQQ">* 标题<small class="english">Title</small></label>
+                                </div>
+                                <div class="col-md-6">
+                                    <input id="title" name="title" class="form-control" type="text" value="">
+                                </div>
+                            </li>
+                            <li>
+                                <div class="col-md-3">
+                                    <label for="contactOrderQQ">* {{.happenTime}}<small class="english">Time</small></label>
+                                </div>
+                                <div class="col-md-6">
+                                    <input id="time" name="time" class="form-control" type="text" value="">
+                                </div>
+                            </li>
+                            <li>
+                                <div class="col-md-3">
+                                    <label for="contactOrderQQ">* {{.happenPlace}}<small class="english">Place</small></label>
+                                </div>
+                                <div class="col-md-6">
+                                    <input id="place" name="place" class="form-control" type="text" value="">
+                                </div>
+                            </li>
+                            <li>
+                                <div class="col-md-3">
+                                    <label for="contactOrderQQ">物品特征<small class="english">Trait</small></label>
+                                </div>
+                                <div class="col-md-6">
+                                    <input id="trait" name="trait" class="form-control" type="text" value="">
+                                </div>
+                            </li>
+                            <li>
+                                <div class="col-md-3">
+                                    <label for="contactOrderQQ">备注信息<small class="english">Rmark</small></label>
+                                </div>
+                                <div class="col-md-6">
+                                    <textarea name="remark" class="form-control"></textarea>
+                                </div>
+                            </li>
+
+                        </ul>
+                    </fieldset>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+</body>

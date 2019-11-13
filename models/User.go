@@ -11,7 +11,7 @@ type User struct {
 	Password   string `json:"password" form:"password"`
 	Name       string `json:"name" form:"name"`
 	Email      string `json:"email" form:"email"`
-	Phone      int    `json:"phone" form:"phone"`
+	Phone      string `json:"phone" form:"phone"`
 	Forbidden  int    `json:"forbidden" form:"forbidden"`
 	CreateTime string `json:"createTime" `
 	UpdateTime string `json:"updateTime" `
@@ -44,14 +44,14 @@ func (this *User) InsertOrUpdate() error {
 		}
 		this.Id = int(id)
 	} else {
-		//up := []string{"Name","Email","Phone","UpdateTime"}
-		//fmt.Printf("%#v \n",this)
-		//if this.Password != ""{
-		//	up = append(up,"Password")
-		//}
-		if _, err := orm.NewOrm().Update(this, "Name", "Email", "Phone", "UpdateTime"); err != nil {
+		up := []string{"Name", "Email", "Phone", "UpdateTime"}
+		if this.Password != "" {
+			up = append(up, "Password")
+		}
+		if _, err := orm.NewOrm().Update(this, up...); err != nil {
 			return err
 		}
+		this.Password = ""
 	}
 	return nil
 }
@@ -70,10 +70,10 @@ func (this *User) ForbidUser(userId, forbidden int) error {
 func (this *User) GetUserInfo() error {
 	//登录获取用户信息
 	if this.Id == 0 {
-		return orm.NewOrm().Raw("SELECT id,account,name,email,forbidden FROM user WHERE account=? and password=?", this.Account, this.Password).QueryRow(&this)
+		return orm.NewOrm().Raw("SELECT id,account,name,email,forbidden,phone FROM user WHERE account=? and password=?", this.Account, this.Password).QueryRow(&this)
 	} else {
 		//根据adminId获取用户信息
-		return orm.NewOrm().Raw("SELECT id,account,name,email,forbidden FROM user WHERE id=?", this.Id).QueryRow(&this)
+		return orm.NewOrm().Raw("SELECT id,account,name,email,forbidden,phone FROM user WHERE id=?", this.Id).QueryRow(&this)
 	}
 }
 

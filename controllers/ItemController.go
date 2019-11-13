@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"found/models"
 	"github.com/astaxie/beego/validation"
-	"net/http"
 	"strconv"
 )
 
@@ -23,7 +22,7 @@ const (
 	ActAdd  = "add"
 	ActEdit = "edit"
 
-	NotFundCode = string(http.StatusNotFound)
+	NotFundCode = "404"
 
 	UploadFileName = "itemPic"
 )
@@ -34,6 +33,7 @@ type ItemController struct {
 
 //参数过滤
 func (this *ItemController) filterParams(params *models.Item) {
+
 	//表单验证
 	valid := validation.Validation{}
 	if this.actionName == "Edit" {
@@ -135,8 +135,6 @@ func (this *ItemController) Edit() {
 		if err := this.ParseForm(&item); err != nil {
 			this.ReturnJson(BindErrCode, err.Error(), nil)
 		}
-
-		fmt.Printf("%#v", item)
 		//校验必填参数
 		this.filterParams(&item)
 		if err := item.InsertOrUpdate(); err != nil {
@@ -156,13 +154,13 @@ func (this *ItemController) GetContentByType(act, itemType string) {
 	case ActList:
 		switch t {
 		case 0:
-			this.Data["addTile"] = "添加寻物启事"
+			this.Data["addTile"] = "发布寻物启事"
 			this.Data["happenTime"] = "丢失时间"
 			this.Data["happenPlace"] = "丢失地点"
 			this.Data["person"] = "失主"
 
 		case 1:
-			this.Data["addTile"] = "添加招领启事"
+			this.Data["addTile"] = "发布招领启事"
 			this.Data["happenTime"] = "拾到时间"
 			this.Data["happenPlace"] = "拾到地点"
 			this.Data["person"] = "拾取人"
@@ -174,7 +172,7 @@ func (this *ItemController) GetContentByType(act, itemType string) {
 		switch t {
 		case 0:
 			if act == ActAdd {
-				this.Data["actTitle"] = "添加寻物启事"
+				this.Data["actTitle"] = "发布寻物启事"
 			} else {
 				this.Data["actTitle"] = "编辑寻物启事"
 			}
@@ -185,7 +183,7 @@ func (this *ItemController) GetContentByType(act, itemType string) {
 
 		case 1:
 			if act == ActEdit {
-				this.Data["actTitle"] = "添加招领启事"
+				this.Data["actTitle"] = "发布招领启事"
 			} else {
 				this.Data["actTitle"] = "编辑招领启事"
 			}
@@ -249,8 +247,56 @@ func (this *ItemController) HomeList() {
 		var item models.Item
 		t, _ := strconv.Atoi(itemType)
 		this.Data["list"], _ = item.GetList(t)
+		this.Data["listTen"], _ = item.GetNewItem(10)
 		this.GetContentByType(ActList, itemType)
 		this.SetTpl(HomeBaseLayout, HomeTplPath, "/item/list.html")
 	}
+}
 
+//详情
+func (this *ItemController) HomeItemDetail() {
+
+	if itemId := this.GetString("itemId"); itemId == "" {
+		this.Abort(NotFundCode)
+	} else {
+		var item models.Item
+		var user models.User
+		data, err := item.GetDetail(itemId)
+		if err != nil {
+			this.Abort(NotFundCode)
+		}
+		uid, _ := strconv.Atoi(data.UserId)
+		user.Id = uid
+		user.GetUserInfo()
+		this.Data["data"] = data
+		this.Data["uinfo"] = user
+		this.Data["listTen"], _ = item.GetNewItem(10)
+		this.SetTpl(HomeBaseLayout, HomeTplPath, "/item/detail.html")
+	}
+}
+
+//添加
+func (this *ItemController) HomeItemAdd() {
+
+	switch this.requestMethod {
+	case "GET":
+		if itemType := this.GetString("type"); itemType == "" {
+			this.Abort(NotFundCode)
+		} else {
+			this.GetContentByType(ActAdd, itemType)
+			fmt.Printf("%#v", this.Data)
+			this.SetTpl(HomeBaseLayout, HomeTplPath, "/item/add.html")
+		}
+	case "POST":
+		var item models.Item
+		if err := this.ParseForm(&item); err != nil {
+			this.ReturnJson(BindErrCode, err.Error(), nil)
+		}
+		//校验必填参数
+		this.filterParams(&item)
+		if err := item.InsertOrUpdate(); err != nil {
+			this.ReturnJson(InsertUpdateErrCode, err.Error(), nil)
+		}
+		this.ReturnJson(SuccessCode, SuccessMessage, nil)
+	}
 }

@@ -1,7 +1,5 @@
 
 <header>
-    <!--加载头部进度条-->
-    <div id="w-loading"> <div style="width: 100%; display: none;"></div></div>
     <!--顶部信息 开始  -->
     <nav class="navbar navbar-default nav-home ">
         <!--顶部信息 结束 -->
@@ -15,7 +13,7 @@
                         <span class="icon-bar"></span> <span class="icon-bar"></span>
                     </button>
                     <a href="/" title="lost&found">
-                        <img alt="lost&found" src="/static/home/logo2.png" class="lazy" style="width: 45%">
+                        <img alt="lost&found" src="/static/home/logo2.png" class="lazy">
                     </a>
                     <div class="visible-xs  user-icon">
                         <a class="qb" href="/blog#login" data-form="loginform" id="ui-login"></a>
@@ -24,12 +22,12 @@
                 <div id="navbar" class="collapse navbar-collapse">
                     <div id="main-nav">
                         <ul class="nav navbar-nav">
-                            <li ><a href="/home/item/list?type=0">首页</a></li>
-                            <li class="current-menu-item"><a href="/home/item/list?type=0">寻物</a></li>
-                            <li><a href="/home/item/list?type=1">招领</a></li>
-                            <li><a href="/home/item/list?type=1">发布寻物</a></li>
-                            <li><a href="/home/item/add?type=1">发布招领</a></li>
-                            <li><a href="/home/user/info">个人中心</a></li>
+                            <li ><a  class="url" href="/">首页</a></li>
+                            <li ><a class="url"  href="/home/item/list?type=0">寻物信息</a></li>
+                            <li ><a class="url"  href="/home/item/list?type=1">招领信息</a></li>
+                            <li ><a class="url"  href="/home/item/add?type=0">发布寻物</a></li>
+                            <li ><a class="url"  href="/home/item/add?type=1">发布招领</a></li>
+                            <li ><a class="url"  href="/home/user/info">个人中心</a></li>
                         </ul>
                     </div>
                     {{if eq .userInfo.Name  "" }}
@@ -58,6 +56,24 @@
         </div>
     </nav>
 </header>
+
+<script type="text/javascript">
+    $(function(){
+        href = window.location.href
+        url  = window.location.host
+        $(".url").each(function(){
+            ahref = $(this).attr("href")
+
+            if (href == "http://"+url+ahref) {
+                console.log("http://"+url+ahref)
+                $(this).parents("li").addClass("url current-menu-item")
+            }
+        });
+
+
+    });
+
+</script>
 <style>
     .label {
         background-color: #d1dade;

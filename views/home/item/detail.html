@@ -1,0 +1,85 @@
+<body class="post-template-default single single-post postid-14990 single-format-standard logged-in">
+<section class="main-body">
+    <div id="content" class="site-content container">
+        <div itemscope=""  id="crumbs" class="breadcrumb">
+            <a itemprop="breadcrumb" href="/">Lost&Found</a>
+            <em class="uicon-angle-right"></em>
+            <a itemprop="breadcrumb" href="/home/item/list?type={{.data.Type}}">{{if eq .data.Type 0}}寻物{{else}}招领{{end}}列表</a>
+            <em class="uicon-angle-right"></em>
+            <span class="current">{{.data.Title}}</span></div>
+        <div class="box article-header">
+            <h1 class="entry-title">{{.data.Title}}</h1>
+            <div class="recom_p">
+                <span class="col-md-6 col-md-3"><i class="uicon-medal"></i>物品名称：{{.data.Name}}</span>
+                <span class="col-xs-6 col-md-3"><i class="glyphicon glyphicon-star-empty"></i>物品特点：{{.data.Trait}}</span>
+                <span class="col-xs-6 col-md-4"><i class="uicon-calendar"></i>发布时间：{{.data.CreateTime}}</span>
+                <span class="col-xs-6 col-md-3"><i class="uicon-position"></i> {{if eq .data.Type 0}}遗失{{else}}拾取{{end}}地点：{{.data.Place}}</span>
+                <span class="col-xs-6 col-md-3"><i class="glyphicon glyphicon-user"></i> 发布人员：{{.uinfo.Name}}</span>
+                <span class="col-xs-6 col-md-4"><i class="glyphicon glyphicon-envelope"></i>联系方式：{{.uinfo.Email}}</span>
+            </div>
+        </div>
+        <div id="primary" class="content-area col-md-8" itemscope="" itemtype="http://schema.org/Article">
+            <main id="main" class="site-main" role="main">
+                <article id="post-14990" class="post-14990 post type-post status-publish format-standard has-post-thumbnail hentry category-business category-dissertation category-essays tag-dissertation tag-literature-review tag-216 tag-1478">
+                    <div class="entry-content" itemprop="articleBody">
+                        <p>{{.data.Remark}}&nbsp;</p>
+                    </div>
+                </article>
+            </main>
+            <main id="main" class="site-main" role="main">
+                <article id="post-" class="  post-14990 post type-post status-publish format-standard has-post-thumbnail hentry category-business category-dissertation category-essays tag-dissertation tag-literature-review tag-216 tag-1478">
+                    <div class="entry-content" itemprop="articleBody">
+                        <img class="" src="{{.data.Image}}">
+                    </div>
+                </article>
+            </main>
+        </div>
+        <div class="col-md-4">
+            <div id="sidebar" class="widget-area blog">
+                <aside id="top-posts-3" class="widget widget_top_posts">
+                    <h3 class="widget-title">
+                        <i class="uicon-tag"></i>最新发布</h3>
+                    <ul>
+                        {{range $key, $val := .listTen}}
+                            <li>
+                            <li style="border-bottom:1px solid #ecedee;">
+                                <!-- start -->
+                                <div class="media">
+                                    <div class="thumb">
+                                        <a  href="/home/item/detail?itemId={{$val.Id}}" title="{{$val.Title}}">
+                                            <img class="media-object" src="{{$val.Image}}" alt="{{$val.Title}}">
+                                        </a>
+
+                                    </div>
+
+                                    <div class="media-body">
+                                        <a  href="/home/item/detail?itemId={{$val.Id}}" title="{{$val.Title}}！">
+                                            <h4 class="top-heading">{{$val.Title}}</h4>
+                                        </a>
+                                        <div class="meta">
+                                            <div class="pull-left">
+                                                <time class="entry-date" datetime="{{$val.UpdateTime}}">{{$val.UpdateTime}}</time>
+                                            </div>
+                                            <span class="gap-point">&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;</span>
+                                            {{if eq $val.Type 0 }}
+                                                <span class="badge badge-danger">寻物</span>
+                                            {{else }}
+                                                <span class="badge badge-primary ">招领</span>
+                                            {{end}}
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </li>
+                            </li>
+                        {{end}}
+                        <!-- 右边栏end -->
+                    </ul>
+                </aside>
+            </div>
+
+        </div>
+
+    </div>
+</section>
+</body>

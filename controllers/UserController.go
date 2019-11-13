@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"found/models"
 	"github.com/astaxie/beego/validation"
 	"strconv"
@@ -130,12 +129,11 @@ func (this *UserController) ForbidUser() {
 //编辑管理员
 func (this *UserController) UserInfo() {
 
+	this.checkHomeLogin()
 	switch this.requestMethod {
 	case "GET":
-		this.checkHomeLogin()
 		this.Data["userInfo"] = this.userInfo
 		this.SetTpl(HomeBaseLayout, HomeTplPath, "/user/userinfo.html")
-
 	case "POST":
 		var user models.User
 		if err := this.ParseForm(&user); err != nil {
@@ -161,6 +159,7 @@ func (this *UserController) UserInfo() {
 		if err := user.InsertOrUpdate(); err != nil {
 			this.ReturnJson(InsertUpdateErrCode, err.Error(), nil)
 		} else {
+			this.SetSession("userInfo", user)
 			this.ReturnJson(SuccessCode, SuccessMessage, nil)
 		}
 	}

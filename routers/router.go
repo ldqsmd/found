@@ -11,6 +11,8 @@ func init() {
 	beego.Router("/page404", &controllers.HomeController{}, "GET:Page404")
 
 	beego.Router("/home/item/list", &controllers.ItemController{}, "Get:HomeList")
+	beego.Router("/home/item/detail", &controllers.ItemController{}, "Get:HomeItemDetail")
+	beego.Router("/home/item/add", &controllers.ItemController{}, "*:HomeItemAdd")
 	//login
 	beego.Router("/home/login", &controllers.LoginController{}, "*:HomeLogin")
 	beego.Router("/home/register", &controllers.LoginController{}, "*:HomeRegister")
