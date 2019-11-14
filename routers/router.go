@@ -23,25 +23,21 @@ func init() {
 	beego.Router("/home/user/info", &controllers.UserController{}, "*:UserInfo")
 
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
 	beego.Router("/admin/index", &controllers.ItemController{}, "GET:Index")
 	//login
 	beego.Router("/admin/login", &controllers.LoginController{}, "*:Login")
 	beego.Router("/logout", &controllers.LoginController{}, "*:Logout")
-
 	//item
 	beego.Router("/item/list", &controllers.ItemController{}, "GET:List")
 	beego.Router("/item/add", &controllers.ItemController{}, "*:Add")
 	beego.Router("/item/edit", &controllers.ItemController{}, "*:Edit")
 	beego.Router("/item/del", &controllers.ItemController{}, "*:Del")
 	beego.Router("/item/status", &controllers.ItemController{}, "POST:ChangeStatus")
-
 	//admin
 	beego.Router("/admin/list", &controllers.AdminController{}, "GET:AdminList")
 	beego.Router("/admin/add", &controllers.AdminController{}, "*:AddAdmin")
 	beego.Router("/admin/edit", &controllers.AdminController{}, "*:EditAdmin")
 	beego.Router("/admin/forbid", &controllers.AdminController{}, "POST:ForbidAdmin")
-
 	//user
 	beego.Router("/user/list", &controllers.UserController{}, "GET:List")
 	beego.Router("/user/add", &controllers.UserController{}, "*:Add")
