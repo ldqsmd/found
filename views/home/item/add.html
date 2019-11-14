@@ -26,7 +26,7 @@
     </div>
     <div class="container order-now">
         <div id="orderwarp" class="orderwarp col-xs-12 col-sm-12 col-md-12 col-lg-12">
-            <form method="POST" role="form" class="order-form" novalidate="novalidate">
+            <form method="POST" role="form" id="signupForm" class="order-form" novalidate="novalidate" enctype="multipart/form-data">
                 <div id="form-content">
                     <fieldset id="one" class="col-md-12">
                         <h3>
@@ -43,7 +43,7 @@
                             </li>
                             <li>
                                 <div class="col-md-3">
-                                    <label for="orderMail"> * 邮箱<small class="english">Email</small></label>
+                                    <label for="orderMail"> *联系邮箱<small class="english">Email</small></label>
                                 </div>
                                 <div class="col-md-6 yx">
                                     <input id="email" name="email" class="form-control" type="text" value="{{.userInfo.Email}}" readonly="readonly">
@@ -51,7 +51,7 @@
                             </li>
                             <li>
                                 <div class="col-md-3">
-                                    <label for="contactOrderQQ">* 标题<small class="english">Title</small></label>
+                                    <label for="contactOrderQQ">*公告标题<small class="english">Title</small></label>
                                 </div>
                                 <div class="col-md-6">
                                     <input id="title" name="title" class="form-control" type="text" value="">
@@ -59,7 +59,15 @@
                             </li>
                             <li>
                                 <div class="col-md-3">
-                                    <label for="contactOrderQQ">* {{.happenTime}}<small class="english">Time</small></label>
+                                    <label for="contactOrderQQ">*物品名称<small class="english">Name</small></label>
+                                </div>
+                                <div class="col-md-6">
+                                    <input id="name" name="name" class="form-control" type="text" value="">
+                                </div>
+                            </li>
+                            <li>
+                                <div class="col-md-3">
+                                    <label for="time">* {{.happenTime}}<small class="english">Time</small></label>
                                 </div>
                                 <div class="col-md-6">
                                     <input id="time" name="time" class="form-control" type="text" value="">
@@ -67,7 +75,7 @@
                             </li>
                             <li>
                                 <div class="col-md-3">
-                                    <label for="contactOrderQQ">* {{.happenPlace}}<small class="english">Place</small></label>
+                                    <label for="Place">* {{.happenPlace}}<small class="english">Place</small></label>
                                 </div>
                                 <div class="col-md-6">
                                     <input id="place" name="place" class="form-control" type="text" value="">
@@ -83,13 +91,34 @@
                             </li>
                             <li>
                                 <div class="col-md-3">
-                                    <label for="contactOrderQQ">备注信息<small class="english">Rmark</small></label>
+                                    <label for="contactOrderQQ">*备注信息<small class="english">Rmark</small></label>
                                 </div>
                                 <div class="col-md-6">
                                     <textarea name="remark" class="form-control"></textarea>
                                 </div>
                             </li>
-
+                            <li>
+                                <div class="col-md-3">
+                                    <label for="contactOrderQQ">上传图片<small class="english">Picture</small></label>
+                                </div>
+                                <div class="col-md-6">
+                                    <input name="itemPic" type="file" id="uploadId"  class="form-field">
+                                </div>
+                            </li>
+                            <li>
+                                <div class="col-md-3">
+                                </div>
+                                <div class="col-md-3">
+                                    <img id="imageview" width="100%" height="100%" />
+                                </div>
+                            </li>
+                            <li>
+                                <div class="col-md-3"></div>
+                                <div class="col-md-3">
+                                    <input  id="itemType"  name="type" class="form-control" type="hidden" value="{{.itemType}}">
+                                    <input  name="image" type="button" id="itemAdd" value="发布公告" class="btn btn-primary">
+                                </div>
+                            </li>
                         </ul>
                     </fieldset>
                 </div>
@@ -97,5 +126,40 @@
         </div>
     </div>
 </section>
+<script type="text/javascript">
+    $(function() {
+        $("#itemAdd").click(function () {
+            successMsg = "发布成功"
 
+            var form = new FormData(document.getElementById("signupForm"));
+            $.ajax({
+                url:"/home/item/add",
+                type:"post",
+                data:form,
+                processData:false,
+                contentType:false,
+                success: function (data) {
+                    console.log(data)
+                    if (data.code == 0) {
+                        alert(successMsg)
+                        window.location.href = "/home/user/item/list";
+                    } else {
+                        alert(data.message);
+                    }
+                }
+            });
+        });
+
+
+        $("#uploadId").change(function() {
+            var $file = $(this);
+            var objUrl = $file[0].files[0];
+            //获得一个http格式的url路径:mozilla(firefox)||webkit or chrome
+            var windowURL = window.URL || window.webkitURL;
+            //createObjectURL创建一个指向该参数对象(图片)的URL
+            var dataURL = windowURL.createObjectURL(objUrl);
+            $("#imageview").attr("src", dataURL);
+        });
+    });
+</script>
 </body>

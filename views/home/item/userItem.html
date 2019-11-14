@@ -1,0 +1,170 @@
+<body class="logged-in body-profile body-ui-profile body-member">
+<section class="main-body">
+    <div class="member-header vcard-canopy">
+        <div class="vcard-canopy-mask"></div>
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-4 col-sm-4 col-md-2 col-lg-2 user-avatar">
+                    <div class="avatar">
+                        <img width="100" height="100" src="/static/images/default_avatar-none.png" alt="{{.userInfo.Name}}">
+                    </div>
+                </div>
+                <div class="col-xs-8 col-sm-8 col-md-10 col-lg-10 user-info">
+                    <div class="user-name">
+                        <span>您好，</span>{{.userInfo.Name}}
+                    </div>
+                    <ul class="user-meta">
+                        <li>
+                            {{.userInfo.Email}}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <canvas></canvas>
+    </div>
+    <div class="member-wrap">
+        <div class="member-menu">
+            <div class="container">
+                <ul class="nav nav-tabs" role="tablist">
+                    <li ><a href="/home/user/info">我的资料</a></li>
+                    <li class="active"><a href="/home/user/item/list"> 我的公告 </a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="member-content container">
+            <ol class="breadcrumb">
+                <li><a href="/home/item/list?type=0">寻物信息</a></li>
+                <li class="active">我的公告</li>
+            </ol>
+            <div class="order-list">
+                <div class="col-md-12 order-box">
+                    <div class="order-box-header">
+                        <h2> 我的公告 </h2>
+                    </div>
+                    <table class="table table-wp-style">
+                        <tbody>
+                        {{range $key, $val := .page.List}}
+                        <tr class=" bg-remind">
+                            <td class="col-md-3 text-center hidden-xs">
+                                <a class=" title" href="/home/item/detail?itemId={{$val.Id}}">
+                                    <img src="{{$val.Image}}" width="100%">
+                                </a>
+                            </td>
+                            <td class="col-md-4 text-center hidden-xs">
+                                <span class="order-no">{{$val.Title}}</span>
+                                {{if eq $val.Type 0}}
+                                    <span class="order-status status-gj">寻物公告</span>
+                                {{else}}
+                                    <span class="order-status status-wc">招领公告</span>
+                                {{end}}
+                            </td>
+                            <td class="col-md-3 text-center hidden-xs">
+                                <a class=" title" href="/home/item/detail?itemId={{$val.Id}}">{{$val.Name}} </a>
+                                {{if eq $val.Type 0 }}
+                                    {{if eq $val.Status 0 }}
+                                        <span class="badge badge-danger">&nbsp;&nbsp;&nbsp;&nbsp;未找回&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                    {{end}}
+                                {{else }}
+                                    {{if eq $val.Status 0 }}
+                                        <span class="badge badge-danger">&nbsp;&nbsp;&nbsp;&nbsp;未认领&nbsp;&nbsp;&nbsp;&nbsp;</span>
+
+                                    {{end}}
+                                {{end}}
+                            </td>
+                            <td class="col-md-6 m-td">
+                                <div class="order-time">
+                                    <span title="" data-toggle="tooltip" data-original-title="{{$val.CreateTime}}">创建时间：{{$val.CreateTime}} </span><br>
+                                    <span>  {{if eq $val.Type 0}}遗失{{else}}拾取{{end}}时间：{{$val.Time}}</span>
+                                </div>
+                            </td>
+                            <td class="col-md-6 m-td">
+                                {{if eq $val.Type 0 }}
+                                    {{if eq $val.Status 0 }}
+                                        <button itemId="{{$val.Id}}" class="btn btn-sm btn-primary changeStatus ">&nbsp;&nbsp;&nbsp;&nbsp;已找回&nbsp;&nbsp;&nbsp;&nbsp;</button>
+                                    {{else }}
+                                        <span class="badge badge-primary">&nbsp;&nbsp;&nbsp;&nbsp;已找回&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                    {{end}}
+                                {{else }}
+                                    {{if eq $val.Status 0 }}
+                                        <button itemId="{{$val.Id}}" class="btn btn-sm btn-primary changeStatus">&nbsp;&nbsp;&nbsp;&nbsp;被认领&nbsp;&nbsp;&nbsp;&nbsp;</button>
+                                    {{else }}
+                                        <span class="badge badge-primary">&nbsp;&nbsp;&nbsp;&nbsp;已认领&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                    {{end}}
+                                {{end}}
+                                <button itemId="{{$val.Id}}" class="btn btn-sm btn-danger delItem" >&nbsp;&nbsp;&nbsp;&nbsp;删除&nbsp;&nbsp;&nbsp;&nbsp;</button>
+                            </td>
+                        </tr>
+                        {{end}}
+                        </tbody>
+                    </table>
+                    <nav class="page-nav page-nav-default"><ul id='itemPage'></ul></nav>
+                </div>
+                <div class="fyp text-center">
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+<script type="text/javascript">
+
+    options = {
+        currentPage:'{{.page.PageNo}}',
+        totalPages: '{{.page.TotalPage}}',
+        bootstrapMajorVersion: 3,
+        size: "small",
+        onPageClicked: function(e,originalEvent,type,page){
+            window.location.href = "/home/user/item/list?page=" + page
+        }
+    };
+    $('#itemPage').bootstrapPaginator(options);
+    $(".changeStatus").click(function () {
+        itemId =  $(this).attr("itemId")
+        //ajax去服务器端校验
+        var data = {
+            itemId: itemId,
+        };
+        $.ajax({
+            type: "POST",
+            url: "/home/user/item/status",
+            data: data,
+            dataType: 'json',
+            success: function (data) {
+                console.log(data)
+                if (data.code == 0) {
+                    alert(data.message);
+                    window.location.reload()
+                } else {
+                    alert(data.message);
+                }
+            }
+        });
+    });
+
+    $(".delItem").click(function () {
+        itemId =  $(this).attr("itemId")
+
+        if (confirm("确定要删除当前公告么?")){
+        //ajax去服务器端校验
+            $.ajax({
+                type: "POST",
+                url: "/home/user/item/del",
+                data:  {
+                        itemId: itemId
+                    },
+                dataType: 'json',
+                success: function (data) {
+                    console.log(data)
+                    if (data.code == 0) {
+                        alert(data.message);
+                        window.location.reload()
+                    } else {
+                        alert(data.message);
+                    }
+                }
+            });
+        }
+
+    });
+</script>

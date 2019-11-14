@@ -1,11 +1,5 @@
 package controllers
 
-import (
-	"github.com/astaxie/beego"
-	"gopkg.in/gomail.v2"
-	"strconv"
-)
-
 const (
 	SuccessMessage = "操作成功"
 	ErrNotEmpty    = "不能为空"
@@ -24,7 +18,31 @@ const (
 	BaseLayoutPage = "base/layout_page.html"
 	HomeBaseLayout = "home/base/layout.html"
 	HomeTplPath    = "home"
+	NotFundCode    = "404"
+	ForbidCode     = "403"
 )
+
+type Page struct {
+	PageNo     int
+	PageSize   int
+	TotalPage  int
+	TotalCount int
+	FirstPage  bool
+	LastPage   bool
+	List       interface{}
+}
+
+func PageUtil(count int, pageNo int, pageSize int, list interface{}) Page {
+
+	if pageNo <= 0 {
+		pageNo = 1
+	}
+	tp := count / pageSize
+	if count%pageSize > 0 {
+		tp = count/pageSize + 1
+	}
+	return Page{PageNo: pageNo, PageSize: pageSize, TotalPage: tp, TotalCount: count, FirstPage: pageNo == 1, LastPage: pageNo == tp, List: list}
+}
 
 // 通过map主键唯一的特性过滤重复元素
 func FilterStrSlice(slc []string) []string {
@@ -39,27 +57,4 @@ func FilterStrSlice(slc []string) []string {
 		}
 	}
 	return result
-}
-
-//发送邮件
-func SendEmail(mailTo []string, subject string, body string) error {
-	//定义邮箱服务器连接信息，如果是阿里邮箱 pass填密码，qq邮箱填授权码
-	mailConn := map[string]string{
-		"from": beego.AppConfig.String("email::from"),
-		"user": beego.AppConfig.String("email::user"),
-		"pass": beego.AppConfig.String("email::pass"),
-		"host": beego.AppConfig.String("email::host"),
-		"port": beego.AppConfig.String("email::port"),
-	}
-	port, _ := strconv.Atoi(mailConn["port"]) //转换端口类型为int
-	m := gomail.NewMessage()
-	m.SetHeader("From", mailConn["from"]+"<"+mailConn["user"]+">") //这种方式可以添加别名，即“XD Game”， 也可以直接用<code>m.SetHeader("From",mailConn["user"])</code> 读者可以自行实验下效果
-	m.SetHeader("To", mailTo...)                                   //发送给多个用户
-	m.SetHeader("Subject", subject)                                //设置邮件主题
-	m.SetBody("text/html", body)                                   //设置邮件正文
-	d := gomail.NewDialer(mailConn["host"], port, mailConn["user"], mailConn["pass"])
-	err := d.DialAndSend(m)
-
-	return err
-
 }

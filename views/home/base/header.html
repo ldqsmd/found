@@ -32,7 +32,7 @@
                     </div>
                     {{if eq .userInfo.Name  "" }}
                     <div class="nav-left-login navbar-nav hidden-xs">
-                        <a class="btn btn-default qb login_btn " href="/home/login" data-form="loginform" id="aaaaaa">登录</a>
+                        <a class="btn btn-default qb login_btn " href="/login" data-form="loginform" id="aaaaaa">登录</a>
                         <a class="btn btn-primary qb reg " href="/home/register">注册</a>
                     </div>
                      {{else}}
@@ -44,10 +44,9 @@
                         <ul class="dropdown-menu dropdown-user" aria-labelledby="memberMenu" role="menu">
                             <li><a href="/home/item/add?type=0" title="发布寻物启事"><i class="uicon-pencil-square"></i>发布寻物启事</a></li>
                             <li><a href="/home/item/add?type=1" title="发布招领启事"><i class="uicon-pencil-square"></i>发布招领启事</a></li>
-                            <li><a href="/home/item/list?type=0&userId={{.userInfo.Id}}" title="我的寻物启事"><i class="uicon-inbox"></i>我的寻物启事</a>
-                            <li><a href="/home/item/list?type=1&userId={{.userInfo.Id}}" title="我的认领启事"><i class="uicon-inbox"></i>我的认领启事</a></li>
+                            <li><a href="/home/user/item/list" title="我的寻物启事"><i class="uicon-inbox"></i>我的公告</a>
                             <li><a href="/home/user/info" title="我的设置"><i class="uicon-wrench"></i>我的设置</a></li>
-                            <li><a href="#" title="退出登录"><i class="uicon-sign-out"></i>退出登录</a></li>
+                            <li><a href="/home/logout" title="退出登录"><i class="uicon-sign-out"></i>退出登录</a></li>
                         </ul>
                     </div>
                     {{end}}

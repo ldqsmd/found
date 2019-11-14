@@ -29,7 +29,7 @@
         <div id="primary" class=" primary essays-list">
             <div class="col-md-8 article">
                 <ul>
-                    {{range $key, $val := .list}}
+                    {{range $key, $val := .page.List}}
                         <li id="post-15011" class="group">
                             <div class="col-xs-12 col-md-4">
                                 <a  href="/home/item/detail?itemId={{$val.Id}}" title="{{$val.Name}}">
@@ -61,22 +61,7 @@
                         </li>
                     {{end}}
                 </ul>
-                <nav class="page-nav page-nav-default">
-                    <div class="pages">
-                        <ul id="pagination" class="pagination pagination-sm"><em></em>
-                            <li class="active"><a href="javascript:;"> 1</a></li>
-                            <li><a href="/blog?bp=2">2</a></li>
-                            <li><a href="/blog?bp=3">3</a></li>
-                            <li><a href="/blog?bp=4">4</a></li>
-                            <li><a href="/blog?bp=5">5</a></li>
-                            <li><a href="/blog?bp=2" class="next mtips" title="下一页"> »</a></li>
-                            <li><a href="/blog?bp=46" class="last">46</a></li>
-                            <input type="text" name="custompage" class="hidden pagenumber mtips" placeholder="页码"
-                                   title="输入页码后按Enter键查询" size="12"
-                                   onkeydown="if(event.keyCode==13) {window.location=&#39;/blog?bp=&#39;+this.value; return false;}">
-                        </ul>
-                    </div>
-                </nav>
+                <nav class="page-nav page-nav-default"><ul id='itemPage'></ul></nav>
             </div>
             <div class="col-md-4">
                 <div id="sidebar" class="widget-area blog">
@@ -102,7 +87,7 @@
                                                 </a>
                                                 <div class="meta">
                                                     <div class="pull-left">
-                                                        <time class="entry-date" datetime="{{$val.UpdateTime}}">{{$val.UpdateTime}}</time>
+                                                        <time class="entry-date" datetime="{{$val.CreateTime}}">{{$val.CreateTime}}</time>
                                                     </div>
                                                     <span class="gap-point">&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;</span>
                                                     {{if eq $val.Type 0 }}
@@ -126,4 +111,19 @@
         </div>
     </div>
 </section>
+
+<script type='text/javascript'>
+
+    options = {
+        currentPage:'{{.page.PageNo}}',
+        totalPages: '{{.page.TotalPage}}',
+        bootstrapMajorVersion: 3,
+        size: "small",
+        onPageClicked: function(e,originalEvent,type,page){
+            window.location.href = "/home/item/list?type={{.itemType}}&page=" + page
+        }
+    };
+    $('#itemPage').bootstrapPaginator(options);
+</script>
+
 </body>

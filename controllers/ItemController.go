@@ -17,12 +17,11 @@ const (
 	ItemTitle  = "标题"
 	ItemImage  = "物品图片"
 	ItemStatus = "物品特点"
+	ItemRemark = "详细描述"
 
 	ActList = "list"
 	ActAdd  = "add"
 	ActEdit = "edit"
-
-	NotFundCode = "404"
 
 	UploadFileName = "itemPic"
 )
@@ -42,20 +41,10 @@ func (this *ItemController) filterParams(params *models.Item) {
 	valid.Required(params.Title, ItemTitle).Message(ErrNotEmpty)
 	valid.Required(params.UserId, UserId).Message(ErrNotEmpty)
 	valid.Required(params.Name, ItemName).Message(ErrNotEmpty)
-	valid.Required(string(params.Type), ItemType).Message(ErrNotEmpty)
+	valid.Required(this.GetString("type"), ItemType).Message(ErrNotEmpty)
 	valid.Required(params.Time, ItemTime).Message(ErrNotEmpty)
 	valid.Required(params.Place, ItemPlace).Message(ErrNotEmpty)
-
-	if _, _, err := this.GetFile(UploadFileName); err == nil {
-		filePath, err := this.UpFileTable(UploadFileName, UploadPicture)
-		if err != nil {
-			this.ReturnJson(FilterErrCode, UploadFileName+":"+err.Error(), nil)
-		} else {
-			params.Image = filePath
-		}
-	} else if this.actionName == "Add" {
-		this.ReturnJson(FilterErrCode, UploadFileName+":"+err.Error(), nil)
-	}
+	valid.Required(params.Remark, ItemRemark).Message(ErrNotEmpty)
 
 	if valid.HasErrors() {
 		for _, err := range valid.Errors {
@@ -63,21 +52,33 @@ func (this *ItemController) filterParams(params *models.Item) {
 				this.ReturnJson(FilterErrCode, err.Key+err.Message, nil)
 			} else {
 				this.Data["error"] = err.Key + err.Message
-				this.Abort(NotFundCode)
+				this.Abort(ForbidCode)
 			}
 		}
 	}
+	if _, _, err := this.GetFile(UploadFileName); err == nil {
+		filePath, err := this.UpFileTable(UploadFileName, UploadPicture)
+		if err != nil {
+			this.ReturnJson(FilterErrCode, UploadFileName+":"+err.Error(), nil)
+		} else {
+			params.Image = filePath
+		}
+	} else if this.actionName == "Add" || this.actionName == "HomeItemAdd" {
+		this.ReturnJson(FilterErrCode, UploadFileName+":"+err.Error(), nil)
+	}
+
 }
 
 func (this *ItemController) Index() {
+	this.checAdminLogin()
 	this.SetTpl("index.html")
 }
 
 //列表
 func (this *ItemController) List() {
-
+	this.checAdminLogin()
 	if itemType := this.GetString("type"); itemType == "" {
-		this.Abort(NotFundCode)
+		this.Abort(ForbidCode)
 	} else {
 		var item models.Item
 		t, _ := strconv.Atoi(itemType)
@@ -91,10 +92,11 @@ func (this *ItemController) List() {
 //添加
 func (this *ItemController) Add() {
 
+	this.checAdminLogin()
 	switch this.requestMethod {
 	case "GET":
 		if itemType := this.GetString("type"); itemType == "" {
-			this.Abort(NotFundCode)
+			this.Abort(ForbidCode)
 		} else {
 			this.GetContentByType(ActAdd, itemType)
 			this.SetTpl(BaseLayoutPage, "item/add.html")
@@ -115,15 +117,15 @@ func (this *ItemController) Add() {
 
 //编辑
 func (this *ItemController) Edit() {
-
+	this.checAdminLogin()
 	switch this.requestMethod {
 	case "GET":
 		if itemId := this.GetString("id"); itemId == "" {
-			this.Abort(NotFundCode)
+			this.Abort(ForbidCode)
 		} else {
 			var item models.Item
 			if itemInfo, err := item.GetDetail(itemId); err != nil || itemInfo.Id == 0 {
-				this.Abort(NotFundCode)
+				this.Abort(ForbidCode)
 			} else {
 				this.GetContentByType(ActEdit, string(itemInfo.Type))
 				this.Data["data"] = itemInfo
@@ -202,7 +204,7 @@ func (this *ItemController) GetContentByType(act, itemType string) {
 
 //更改状态
 func (this *ItemController) ChangeStatus() {
-
+	this.checAdminLogin()
 	var item models.Item
 	if err := this.ParseForm(&item); err != nil {
 		this.ReturnJson(BindErrCode, err.Error(), nil)
@@ -225,6 +227,8 @@ func (this *ItemController) ChangeStatus() {
 
 //删除
 func (this *ItemController) Del() {
+
+	this.checAdminLogin()
 	var item models.Item
 	if err := this.ParseForm(&item); err != nil {
 		this.ReturnJson(BindErrCode, err.Error(), nil)
@@ -245,12 +249,28 @@ func (this *ItemController) HomeList() {
 		this.Abort(NotFundCode)
 	} else {
 		var item models.Item
-		t, _ := strconv.Atoi(itemType)
-		this.Data["list"], _ = item.GetList(t)
+		pageSize := 5
+		itype, _ := strconv.Atoi(itemType)
+		page, _ := this.GetInt("page")
+		count, itemList, _ := item.HomeGetList(itype, pageSize, pageSize*(page-1))
 		this.Data["listTen"], _ = item.GetNewItem(10)
+		this.Data["page"] = PageUtil(int(count), page, pageSize, itemList)
 		this.GetContentByType(ActList, itemType)
 		this.SetTpl(HomeBaseLayout, HomeTplPath, "/item/list.html")
 	}
+}
+
+//列表
+func (this *ItemController) UserItemList() {
+	this.checkHomeLogin()
+	var item models.Item
+	pageSize := 5
+	page, _ := this.GetInt("page")
+	count, itemList, _ := item.GetUserItemByUserId(this.userInfo.Id, pageSize, pageSize*(page-1))
+	fmt.Printf("%#v \n", itemList)
+	this.Data["page"] = PageUtil(int(count), page, pageSize, itemList)
+	this.SetTpl(HomeBaseLayout, HomeTplPath, "/item/userItem.html")
+
 }
 
 //详情
@@ -278,13 +298,13 @@ func (this *ItemController) HomeItemDetail() {
 //添加
 func (this *ItemController) HomeItemAdd() {
 
+	this.checkHomeLogin()
 	switch this.requestMethod {
 	case "GET":
 		if itemType := this.GetString("type"); itemType == "" {
 			this.Abort(NotFundCode)
 		} else {
 			this.GetContentByType(ActAdd, itemType)
-			fmt.Printf("%#v", this.Data)
 			this.SetTpl(HomeBaseLayout, HomeTplPath, "/item/add.html")
 		}
 	case "POST":
@@ -293,9 +313,44 @@ func (this *ItemController) HomeItemAdd() {
 			this.ReturnJson(BindErrCode, err.Error(), nil)
 		}
 		//校验必填参数
+		item.UserId = strconv.Itoa(this.userInfo.Id)
 		this.filterParams(&item)
 		if err := item.InsertOrUpdate(); err != nil {
 			this.ReturnJson(InsertUpdateErrCode, err.Error(), nil)
+		}
+		this.ReturnJson(SuccessCode, SuccessMessage, nil)
+	}
+}
+
+//更改状态
+func (this *ItemController) HomeChangeStatus() {
+	this.checkHomeLogin()
+	var item models.Item
+	if itemId := this.GetString("itemId"); itemId == "" {
+		this.ReturnJson(FilterErrCode, ItemId+ErrNotEmpty, nil)
+	} else {
+		intId, _ := strconv.Atoi(itemId)
+		item.Id = intId
+		if err := item.UpdateStatus(1); err != nil {
+			this.ReturnJson(InsertUpdateErrCode, err.Error(), nil)
+		} else {
+			this.ReturnJson(SuccessCode, SuccessMessage, nil)
+		}
+	}
+
+}
+
+//更改状态
+func (this *ItemController) HomeDel() {
+	this.checkHomeLogin()
+	var item models.Item
+	if itemId := this.GetString("itemId"); itemId == "" {
+		this.ReturnJson(FilterErrCode, ItemId+ErrNotEmpty, nil)
+	} else {
+		intId, _ := strconv.Atoi(itemId)
+		item.Id = intId
+		if err := item.Delete(); err != nil {
+			this.ReturnJson(DelErrCode, err.Error(), nil)
 		}
 		this.ReturnJson(SuccessCode, SuccessMessage, nil)
 	}

@@ -75,7 +75,6 @@
                 name: name,
                 email: email,
             };
-
             $.ajax({
                 type: "POST",
                 url: "/home/register",
@@ -85,7 +84,7 @@
                     //alert(msg);
                     if (data.code == 0) {
                         alert("注册成功,跳转登录页")
-                        window.location.href = "/home/login";
+                        window.location.href = "/login";
                     } else {
                         alert(data.message);
                     }

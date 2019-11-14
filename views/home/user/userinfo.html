@@ -27,10 +27,8 @@
         <div class="member-menu">
             <div class="container">
                 <ul class="nav nav-tabs" role="tablist">
-                    <li class="active"><a href="http://www.uiessays.com/home/profile">我的资料</a></li>
-                    <li><a href="http://www.uiessays.com/home/order"> 我的订单 </a></li>
-                    <li><a href="http://www.uiessays.com/home/gift"> 积分商城</a></li>
-                    <li class="hidden"><a href="http://www.uiessays.com/home/m-letter"><span>站内信息</span></a></li>
+                    <li class="active"><a href="/home/user/info">我的资料</a></li>
+                    <li ><a href="/home/user/item/list"> 我的公告 </a></li>
                 </ul>
             </div>
         </div>
@@ -113,12 +111,12 @@
             success: function (data) {
                 //alert(msg);
                 console.log(data)
-                // if (data.code == 0) {
-                //     alert("用户信息更新成功,跳转登录页")
-                //     window.location.reload()
-                // } else {
-                //     alert(data.message);
-                // }
+                if (data.code == 0) {
+                    alert(data.message);
+                    window.location.reload()
+                } else {
+                    alert(data.message);
+                }
             }
         });
     });

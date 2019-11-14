@@ -27,11 +27,15 @@
             <label for="user_pass">密码<br>
             <input type="password" name="password" id="user_pass" class="input" value="" size="20"></label>
         </p>
-        <p class="forgetmenot"><label for="rememberme"><input name="rememberme" type="checkbox" id="rememberme" value="forever"> 记住我的登录信息</label></p>
+        <p class="forgetmenot"><label for="rememberme"><input name="rememberme" type="checkbox" id="rememberme" value="forever"> 记住登录信息</label></p>
         <p class="submit">
             <input type="button" id="homeLogin" class="button button-primary button-large" value="登录">
             <input type="hidden" name="testcookie" value="1">
+
         </p>
+        <p class="text-muted text-center">  | <a href="/home/register">注册一个新账号</a>
+        </p>
+
     </form>
     <script type="text/javascript">
         $("#homeLogin").click(function () {
@@ -49,7 +53,7 @@
 
             $.ajax({
                 type: "POST",
-                url: "/home/login",
+                url: "/login",
                 data: data,
                 dataType: 'json',
                 success: function (data) {

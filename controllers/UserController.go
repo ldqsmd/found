@@ -46,7 +46,7 @@ func (this *UserController) filterParams(mod models.User) {
 }
 
 func (this *UserController) List() {
-
+	this.checAdminLogin()
 	var user models.User
 	this.Data["list"], _ = user.GetList()
 	this.SetTpl(BaseLayoutPage, "user/list.html")
@@ -54,7 +54,7 @@ func (this *UserController) List() {
 
 //添加管理员
 func (this *UserController) Add() {
-
+	this.checAdminLogin()
 	switch this.requestMethod {
 	case "GET":
 		this.SetTpl(BaseLayoutPage, "user/add.html")
@@ -76,7 +76,7 @@ func (this *UserController) Add() {
 
 //编辑管理员
 func (this *UserController) Edit() {
-
+	this.checAdminLogin()
 	switch this.requestMethod {
 	case "GET":
 		var user models.User
@@ -103,7 +103,7 @@ func (this *UserController) Edit() {
 
 //软删除
 func (this *UserController) ForbidUser() {
-
+	this.checAdminLogin()
 	var user models.User
 	forbidden := this.GetString("forbidden")
 	//校验必填参数

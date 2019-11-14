@@ -31,12 +31,31 @@ func (this *Item) GetList(itemType int) ([]Item, error) {
 	return list, err
 }
 
-//獲取詳情
+//获取列表
+func (this *Item) HomeGetList(itemType, limit, offset int) (int64, []Item, error) {
+	var list []Item
+	this.Type = itemType
+	query := orm.NewOrm().QueryTable("item")
+	count, _ := query.Filter("type", this.Type).Count()
+	_, err := query.OrderBy("-create_time").Filter("type", this.Type).Limit(limit, offset).All(&list)
+	return count, list, err
+}
+
+//获取最新的num 条
 func (this *Item) GetNewItem(num int) ([]Item, error) {
 	var list []Item
 	query := orm.NewOrm().QueryTable("item")
 	_, err := query.OrderBy("-create_time").Limit(num).All(&list)
 	return list, err
+}
+
+//根据用户Id 获取用户发布的信息
+func (this *Item) GetUserItemByUserId(userId, limit, offset int) (int, []Item, error) {
+	var list []Item
+	query := orm.NewOrm().QueryTable("item")
+	count, _ := query.Filter("user_id", userId).Count()
+	_, err := query.OrderBy("-create_time").Filter("user_id", userId).Limit(limit, offset).All(&list)
+	return int(count), list, err
 }
 
 //獲取詳情

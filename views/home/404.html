@@ -1,10 +1,53 @@
-<body class="error404 logged-in">
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NotFound</title>
+    <meta name="keywords" content="H+后台主题,后台bootstrap框架,会员中心主题,后台HTML,响应式后台">
+    <meta name="description" content="H+是一个完全响应式，基于Bootstrap3最新版本开发的扁平化主题，她采用了主流的左右两栏式布局，使用了Html5+CSS3等现代技术">
+     {{template  "base/globalcss.html"}}
+</head>
+
+<style>
+    .error404 {
+        background: #fff
+    }
+    .error404 header .navbar-default {
+        margin-bottom: 0;
+        border: 1px solid #e7e7e7
+    }
+    .error404 .pg-center {
+        height: 465px;
+        margin: 0 auto;
+        background-image: url(../../../static/images/ui/404.png);
+        background-repeat: no-repeat;
+        background-position: center
+    }
+    .error404 .pg-content {
+        margin: 50px
+    }
+
+    .error404 .pg-content span {
+        font-size: 20px;
+        display: inline-block;
+        width: 100%;
+        margin-bottom: 10px;
+        color: #999
+    }
+    .error404 .pg-content span.reason {
+        color: #34495e
+    }
+    .error404 .pg-content a {
+        font-size: 14px
+    }
+</style>
+<body class="error404 logged-in gray-bg">
 <section class="main-body">
     <div class="pg-center"></div>
-    <div class="pg-content text-center">
-        <span>此页面已无法找到</span>
-        <span class="reason">可能已经被删除或者地址错误</span>
-        <a href="/" class="pg-backhome">Lost&Found</a>
-    </div>
 </section>
+<div class="middle-box text-center animated fadeInDown">
+    <h2>   抱歉，页面好像去火星了~</h2>
+</div>
 </body>
+</html>

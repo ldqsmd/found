@@ -138,6 +138,6 @@ func (this *LoginController) HomeRegister() {
 
 func (this *LoginController) HomeLogout() {
 	this.DestroySession()
-	this.Redirect(this.URLFor("LoginController.HomeLogin"), 302)
+	this.Redirect(this.URLFor("HomeController.Index"), 302)
 	this.StopRun()
 }

@@ -12,7 +12,7 @@
             <div class="recom_p">
                 <span class="col-md-6 col-md-3"><i class="uicon-medal"></i>物品名称：{{.data.Name}}</span>
                 <span class="col-xs-6 col-md-3"><i class="glyphicon glyphicon-star-empty"></i>物品特点：{{.data.Trait}}</span>
-                <span class="col-xs-6 col-md-4"><i class="uicon-calendar"></i>发布时间：{{.data.CreateTime}}</span>
+                <span class="col-xs-6 col-md-4"><i class="uicon-calendar"></i>{{if eq .data.Type 0}}遗失{{else}}拾取{{end}}时间：{{.data.Time}}</span>
                 <span class="col-xs-6 col-md-3"><i class="uicon-position"></i> {{if eq .data.Type 0}}遗失{{else}}拾取{{end}}地点：{{.data.Place}}</span>
                 <span class="col-xs-6 col-md-3"><i class="glyphicon glyphicon-user"></i> 发布人员：{{.uinfo.Name}}</span>
                 <span class="col-xs-6 col-md-4"><i class="glyphicon glyphicon-envelope"></i>联系方式：{{.uinfo.Email}}</span>

@@ -6,11 +6,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BaiSheng - 登录</title>
-
     <link rel="shortcut icon" href="favicon.ico">
-
     {{template "base/globalcss.html"}}
-
     <!--[if lt IE 9]>
     <meta http-equiv="refresh" content="0;ie.html" />
     <![endif]-->
@@ -23,7 +20,7 @@
         <div>
             <h4 class="logo-name"></h4>
         </div>
-        <h3>欢迎使用 BaiSheng管理后台</h3>
+        <h3>欢迎使用Lost&Found管理后台</h3>
 
         <form id="commentForm" class="m-t" role="form">
 
@@ -82,7 +79,7 @@
                                 if (r != null) return unescape(r[2]); return null;
                             }
 
-                            window.location.href='{{ urlfor "HomeController.Index"}}'
+                            window.location.href='{{ urlfor "ItemController.Index"}}'
                         }else{
                             layer.msg(data.message, {icon: 5,offset: '400px'});
                         }

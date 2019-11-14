@@ -28,8 +28,6 @@ func (this *BaseController) Prepare() {
 	//从Session里获取数据 设置用户信息
 	this.adapterAdminInfo()
 	this.adapterUserInfo()
-	//this.checAdminLogin()
-	//this.checkHomeLogin()
 }
 
 //获取session admin信息
