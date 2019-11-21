@@ -68,6 +68,20 @@
 <!-- Page-Level Scripts -->
 <script>
 
+
+    $(document).ready(function () {
+        $('.dataTables-example').dataTable(
+            {
+                "ordering": false,
+                "bAutoWidth":true,
+            }
+        );
+
+
+        //删除 软删除
+        $(".delStore").click();
+    });
+
     function related(id) {
         //iframe层
         parent.layer.open({
