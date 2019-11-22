@@ -249,11 +249,13 @@ func (this *ItemController) HomeList() {
 		this.Abort(NotFundCode)
 	} else {
 		var item models.Item
+		var notice models.Notice
 		pageSize := 5
 		itype, _ := strconv.Atoi(itemType)
 		page, _ := this.GetInt("page")
 		count, itemList, _ := item.HomeGetList(itype, pageSize, pageSize*(page-1))
-		this.Data["listTen"], _ = item.GetNewItem(10)
+		this.Data["latestList"], _ = item.GetNewItem(5)
+		this.Data["latestNotice"], _ = notice.GetTheLatest(5)
 		this.Data["page"] = PageUtil(int(count), page, pageSize, itemList)
 		this.GetContentByType(ActList, itemType)
 		this.SetTpl(HomeBaseLayout, HomeTplPath, "/item/list.html")
@@ -281,6 +283,7 @@ func (this *ItemController) HomeItemDetail() {
 	} else {
 		var item models.Item
 		var user models.User
+		var notice models.Notice
 		data, err := item.GetDetail(itemId)
 		if err != nil {
 			this.Abort(NotFundCode)
@@ -290,7 +293,9 @@ func (this *ItemController) HomeItemDetail() {
 		user.GetUserInfo()
 		this.Data["data"] = data
 		this.Data["uinfo"] = user
-		this.Data["listTen"], _ = item.GetNewItem(10)
+		this.Data["listTen"], _ = item.GetNewItem(5)
+		this.Data["latestNotice"], _ = notice.GetTheLatest(5)
+
 		this.SetTpl(HomeBaseLayout, HomeTplPath, "/item/detail.html")
 	}
 }

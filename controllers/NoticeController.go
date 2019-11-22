@@ -123,16 +123,18 @@ func (this *NoticeController) HomeList() {
 
 //详情
 func (this *NoticeController) HomeDetail() {
-
 	if id := this.GetString("noticeId"); id == "" {
 		this.Abort(NotFundCode)
 	} else {
+		var item models.Item
 		var obj models.Notice
 		data, err := obj.GetDetail(id)
 		if err != nil {
 			this.Abort(NotFundCode)
 		}
 		this.Data["data"] = data
+		this.Data["latestList"], _ = item.GetNewItem(5)
+		this.Data["latestNotice"], _ = obj.GetTheLatest(5)
 		this.SetTpl(HomeBaseLayout, HomeTplPath, "/notice/detail.html")
 	}
 }

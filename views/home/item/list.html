@@ -53,8 +53,6 @@
                                         <time class="time">
                                           {{$val.CreateTime}}
                                         </time>
-
-
                                     </div>
                                 </div>
                             </div>
@@ -65,11 +63,25 @@
             </div>
             <div class="col-md-4">
                 <div id="sidebar" class="widget-area blog">
+                    <aside id="random-posts-4" class="widget widget_my_random_posts"><h3 class="widget-title">
+                            <i class="uicon-tag"></i>平台公告</h3><ul id="randomposts">
+                            {{range $key, $val := .latestNotice}}
+                                <li>
+                                    <a title="{{$val.CreateTime}}&nbsp;•&nbsp;{{$val.Title}}" href="/home/notice/detail?noticeId={{$val.Id}}">
+                                        {{$val.Title}}
+                                        <span class="gap-point">&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;</span>
+                                        {{$val.CreateTime}}
+                                    </a>
+                                </li>
+                            {{end}}
+
+                        </ul>
+                    </aside>
                     <aside id="top-posts-3" class="widget widget_top_posts">
                         <h3 class="widget-title">
                             <i class="uicon-tag"></i>最新发布</h3>
                         <ul>
-                            {{range $key, $val := .listTen}}
+                            {{range $key, $val := .latestList}}
                                 <li>
                                     <li style="border-bottom:1px solid #ecedee;">
                                          <!-- start -->

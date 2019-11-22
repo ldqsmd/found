@@ -22,6 +22,9 @@ func init() {
 	//user
 	beego.Router("/home/user/info", &controllers.UserController{}, "*:UserInfo")
 
+	//notice
+	beego.Router("/home/notice/detail", &controllers.NoticeController{}, "get:HomeDetail")
+
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 	//admin
 	beego.Router("/admin/index", &controllers.ItemController{}, "GET:Index")

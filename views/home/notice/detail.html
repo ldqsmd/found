@@ -1,0 +1,92 @@
+<body class="blog-template-default single single-blog postid-2812">
+<section class="main-body">
+    <div id="content" class="site-content container">
+        <div itemscope="" id="crumbs" class="breadcrumb">
+            <a itemprop="breadcrumb" href="/">Lost&Found</a>
+            <em class="uicon-angle-right"></em> <a itemprop="breadcrumb" href="#">平台公告</a>
+            <em class="uicon-angle-right"></em> <span class="current">{{.data.Title}}</span></div>
+        <div id="primary" class="content-area col-md-8" itemscope="" itemtype="http://schema.org/Article">
+        <div id="share_box" style="left: 336.5px;">
+            <span class="btn-share" id="go_share_btn">
+                <i class="uicon-share-fenxiang"></i>
+            </span>
+        </div>
+        <main id="main" class="site-main swipeboxEx" role="main">
+            <article id="post-2812" class="post-2812 blog type-blog status-publish has-post-thumbnail hentry">
+                <div class="entry-content" itemprop="articleBody">
+                    <h1 id="p-title"><strong itemprop="name">{{.data.Title}}</strong></h1>
+                    <div class="blog-meta entry-meta">
+                        <span class="tag-view">发布时间</span>
+                        <span class="gap-point">•</span>
+                        <span itemprop="datePublished" content="{{.data.CreateTime}}">{{.data.CreateTime}} </span>
+                    </div>
+                        <p>{{.data.Content}}</p>
+                        <p>&nbsp;</p>
+                    </div>
+
+                </article>
+            </main>
+        </div>
+        <div class="col-md-4">
+            <div id="sidebar" class="widget-area blog">
+                <aside id="random-posts-4" class="widget widget_my_random_posts">
+                    <h3 class="widget-title">
+                        <i class="uicon-tag"></i>平台公告</h3>
+                    <ul id="randomposts">
+                        {{range $key, $val := .latestNotice}}
+                            <li>
+                                <a title="{{$val.CreateTime}}&nbsp;•&nbsp;{{$val.Title}}"
+                                   href="/home/notice/detail?noticeId={{$val.Id}}">{{$val.Title}}
+                                    <span class="gap-point">&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;</span>{{$val.CreateTime}}
+                                </a>
+                            </li>
+                        {{end}}
+                    </ul>
+                </aside>
+                <aside id="top-posts-3" class="widget widget_top_posts">
+                    <h3 class="widget-title">
+                        <i class="uicon-tag"></i> 最新发布</h3>
+                    <ul>
+                        {{range $key, $val := .latestList}}
+                            <li>
+                            <li style="border-bottom:1px solid #ecedee;">
+                                <!-- start -->
+                                <div class="media">
+                                    <div class="thumb">
+                                        <a href="/home/item/detail?itemId={{$val.Id}}" title="{{$val.Title}}">
+                                            <img class="media-object" src="{{$val.Image}}" alt="{{$val.Title}}">
+                                        </a>
+
+                                    </div>
+
+                                    <div class="media-body">
+                                        <a href="/home/item/detail?itemId={{$val.Id}}" title="{{$val.Title}}！">
+                                            <h4 class="top-heading">{{$val.Title}}</h4>
+                                        </a>
+                                        <div class="meta">
+                                            <div class="pull-left">
+                                                <time class="entry-date"
+                                                      datetime="{{$val.UpdateTime}}">{{$val.UpdateTime}}</time>
+                                            </div>
+                                            <span class="gap-point">&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;</span>
+                                            {{if eq $val.Type 0 }}
+                                                <span class="badge badge-danger">寻物</span>
+                                            {{else }}
+                                                <span class="badge badge-primary ">招领</span>
+                                            {{end}}
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </li>
+                            </li>
+                        {{end}}
+                    </ul>
+                </aside>
+
+            </div>
+
+        </div>
+    </div>
+</section>
+</body>
