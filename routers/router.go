@@ -23,6 +23,7 @@ func init() {
 	beego.Router("/home/user/info", &controllers.UserController{}, "*:UserInfo")
 
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+	//admin
 	beego.Router("/admin/index", &controllers.ItemController{}, "GET:Index")
 	//login
 	beego.Router("/admin/login", &controllers.LoginController{}, "*:Login")
@@ -44,4 +45,9 @@ func init() {
 	beego.Router("/user/edit", &controllers.UserController{}, "*:Edit")
 	beego.Router("/user/forbid", &controllers.UserController{}, "POST:ForbidUser")
 
+	//notice
+	beego.Router("/notice/list", &controllers.NoticeController{}, "GET:List")
+	beego.Router("/notice/add", &controllers.NoticeController{}, "*:Add")
+	beego.Router("/notice/edit", &controllers.NoticeController{}, "*:Edit")
+	beego.Router("/notice/del", &controllers.NoticeController{}, "POST:Del")
 }

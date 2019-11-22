@@ -10,5 +10,6 @@ func init() {
 		new(Admin),
 		new(Item),
 		new(User),
-		)
+		new(Notice),
+	)
 }

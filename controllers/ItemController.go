@@ -340,7 +340,7 @@ func (this *ItemController) HomeChangeStatus() {
 
 }
 
-//更改状态
+//删除
 func (this *ItemController) HomeDel() {
 	this.checkHomeLogin()
 	var item models.Item
